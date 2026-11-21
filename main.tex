@@ -21,6 +21,7 @@
 \newtheorem{corollary}[theorem]{推论}
 \theoremstyle{definition}
 \newtheorem{remark}[theorem]{注}
+\newtheorem{definition}[theorem]{定义}
 
 \renewcommand{\abstractname}{摘要}
 \renewcommand{\keywordsname}{关键词}
@@ -35,33 +36,34 @@
 
 \begin{document}
 
-\title[模型算子的极点谱]{条件哥德巴赫方法中\\ 模型算子的极点谱}
+\title[对角算子的谱范数]{条件哥德巴赫方法中\\ 对角算子的谱范数}
 
 \author{}
 
 \date{}
 
-\subjclass[2020]{主分类 11M26；次分类 11M06, 47A75}
+\subjclass[2020]{主分类 11N13；次分类 47B35, 47A75}
 
-\keywords{哥德巴赫猜想，模型算子，哈代空间，欧拉乘积，迹类}
+\keywords{哥德巴赫猜想，对角算子，哈代空间，Schur 检验，加权素数定理}
 
 \begin{abstract}
 在 Li 与 Liu 的条件哥德巴赫方法中，加权哥德巴赫误差被精确表示为一个作用在
 哈代空间上的算子 $T_N=\mathcal P_N-\mathcal D_N-\mathcal K_N$ 的二次型。本文
-确定模型算子 $\mathcal K_N$ 的首阶谱行为。我们证明精确分解
-$\mathcal K_N=-W_N+R_N$，其中 $W_N$ 是正积分算子，其核用 \cite{LL} 中的因子
-$X_1$ 以闭式写出；$R_N$ 是希尔伯特--施密特算子，满足
-$\|R_N\|_{\HS}\ll(\log\log(3N))^2$。我们证明
-$\|W_N\|=\bigl(\pi/e^3+o(1)\bigr)\log N$；由此 $\mathcal K_N$ 有一个负特征值
-$-\pi e^{-3}\log N+o(\log N)$，且 $\|\mathcal K_N\|_{\HS}\ll(\log N)^{3/2}$。
-证明不使用任何未证假设。
+确定对角分量 $\mathcal D_N$ 的首阶范数：
+\[
+ \|\mathcal D_N\|=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N .
+\]
+证明用到 $\mathcal D_N$ 在 Fourier--Laplace 坐标下的精确核、加权素数定理、
+一个光滑模型核（其范数由 Schur 检验与匹配的试验向量精确到首阶），以及把模型
+范数搬回 $\mathcal D_N$ 的三区域比较。结论是无条件的，并且改进了 \cite{LL}
+中对角分量所用的希尔伯特--施密特界。
 \end{abstract}
 
 \maketitle
 
 \section{引言}
 
-\subsection*{1.1.\ 模型算子}
+\subsection*{1.1.\ 对角算子}
 
 在 \cite{LL} 中，Li 与 Liu 证明了二元哥德巴赫猜想的一个条件形式。他们的论证
 把加权哥德巴赫误差化归为竖直条带的哈代空间上一个紧自伴算子 $T_N$ 的精确二次型，
@@ -70,7 +72,7 @@ $-\pi e^{-3}\log N+o(\log N)$，且 $\|\mathcal K_N\|_{\HS}\ll(\log N)^{3/2}$。
  T_N=\mathcal P_N-\mathcal D_N-\mathcal K_N,
 \end{equation}
 其中 $\mathcal P_N$ 是精确的特征投影，$\mathcal D_N$ 是精确的对角算子，
-$\mathcal K_N$ 是贝塔模型。本文确定 $\mathcal K_N$ 的首阶谱特征。
+$\mathcal K_N$ 是贝塔模型。本文确定对角分量的首阶范数。
 
 设 $N>e^{10}$ 为偶数。我们沿用 \cite[\S5--6]{LL} 的记号：
 \[
@@ -84,142 +86,99 @@ $\mathcal K_N$ 是贝塔模型。本文确定 $\mathcal K_N$ 的首阶谱特征�
  =\int_{\Gamma_N}h(s)\overline{g(s)}\,|\mathrm ds|;
 \end{equation}
 由 \cite[引理 5.2]{LL}，边界值在 $L^2$ 中存在，且 \eqref{eq:inner} 是
-$\mathcal H_N$ 的内积。该积分是共轭对称的，我们记
-$\|h\|_{\mathcal H_N}^2=\langle h,h\rangle_{\mathcal H_N}$。
+$\mathcal H_N$ 的内积。内积对第一个变量线性，我们记
+$(f\otimes g)h=\langle h,g\rangle f$。
 
-基本因子为
-\begin{equation}\label{eq:X1}
- X_1(s)=\frac{\Gamma\bigl(\frac{3/2-s}{2}\bigr)}
-               {\Gamma\bigl(\frac{3/2+s}{2}\bigr)},
- \qquad
- P_N(w)=\prod_{\substack{p>2\\p\nmid N}}\Bigl(1+\frac{p^{-w}}{p-2}\Bigr),
- \qquad
- \mathfrak S(N)=2C_2\prod_{\substack{p\mid N\\p>2}}\frac{p-1}{p-2},
+对角算子是正秩一级数
+\begin{equation}\label{eq:DN}
+ \mathcal D_N=\sum_{(n,N)=1}\frac{\Lambda^2(n)}{n}\,d_n\otimes d_n,
+ \qquad d_n(s)=\frac{n^{-s}}{1+s},
 \end{equation}
-其中 $C_2=\prod_{p>2}\bigl(1-(p-1)^{-2}\bigr)=0.66016\ldots$，并且
-\begin{equation}\label{eq:LN}
- L_N=\log\frac N\pi,\qquad
- \mathscr A_N(w)=\mathfrak S(N)P_N(w)\zeta(1-w).
+其中 $\Lambda$ 是冯·曼戈尔特函数。等价地，记 $q$ 为与 $N$ 互素的素数幂，
+\begin{equation}\label{eq:phiq}
+ \varphi_q(s)=\frac{q^{-1-s}}{1+s}=q^{-1}d_q(s),
 \end{equation}
-模型核为
-\begin{equation}\label{eq:kernel}
- \kappa_N(s,z)=\frac{X_1(s)X_1(\bar z)}{(1+s)(1+\bar z)}\,
- e^{-L_N(s+\bar z)}\mathscr A_N(s+\bar z),
- \qquad s,z\in\Gamma_N,
+则
+\begin{equation}\label{eq:DN2}
+ \mathcal D_N=\sum_{q}q\Lambda(q)^2\,\varphi_q\otimes\varphi_q .
 \end{equation}
-模型算子通过下式作用于 $\mathcal H_N$：
-\begin{equation}\label{eq:K}
- (\mathcal K_Nh)(s)=\int_{\Gamma_N}\kappa_N(s,z)\,h(z)\,|\mathrm dz|,
- \qquad h\in\mathcal H_N .
+该级数在迹范数下收敛，且 $\operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}$；
+见 \cite[命题 6.5]{LL}。该命题只用到迹界，对算子范数而言它给出
+\begin{equation}\label{eq:coarse}
+ \|\mathcal D_N\|\le\|\mathcal D_N\|_{\HS}\le\operatorname{tr}\mathcal D_N
+ \ll(\log N)^2 .
 \end{equation}
-这是 \cite[\S6.4]{LL} 中三个算子里的模型分量；它的边界因子与 \cite{LL} 相同。
-
-对 $x\ge L_N$ 置
-\begin{equation}\label{eq:Phi}
- \Phi_x(s,z)=\frac{X_1(s)X_1(\bar z)}{(1+s)(1+\bar z)}\,e^{-x(s+\bar z)},
- \qquad s,z\in\Gamma_N,
-\end{equation}
-并定义权重
-\begin{equation}\label{eq:w}
- \varpi(x)=x-L_N+h_N,\qquad x\ge L_N,
-\end{equation}
-其中 $h_N$ 如下文引理~\ref{lem:value} 所定义。极点算子与余项分别是核为
-\begin{equation}\label{eq:kW}
- \kappa_W(s,z)=\int_{L_N}^{\infty}\varpi(x)\,\Phi_x(s,z)\,\mathrm dx,
- \qquad
- \kappa_{R_N}(s,z)=\kappa_N(s,z)+\kappa_W(s,z)
-\end{equation}
-的算子；我们分别用 $W_N$ 与 $R_N$ 表示它们在 $\mathcal H_N$ 上对应的算子。
 
 \subsection*{1.2.\ 结果陈述}
 
 \begin{theorem}\label{thm:main}
-设 $N>e^{10}$ 为偶数，$\mathcal K_N$ 为模型算子
-\eqref{eq:kernel}--\eqref{eq:K}。则下列结论成立。
-\begin{enumerate}
-\item[(i)] $\mathcal K_N$ 是 $\mathcal H_N$ 上的自伴希尔伯特--施密特算子。
-\item[(ii)] 以 \eqref{eq:kW} 中的 $\kappa_W$ 与 $\kappa_{R_N}$，
-\[
- \mathcal K_N=-W_N+R_N,\qquad W_N\ge0,\qquad W_N\ \text{是迹类的},
-\]
-且
-\[
- \|R_N\|_{\HS}\ll(\log\log(3N))^2 .
-\]
-\item[(iii)] $\|W_N\|=\Bigl(\dfrac{\pi}{e^3}+o(1)\Bigr)\log N$。
-\item[(iv)] $\mathcal K_N$ 的最小特征值满足
-\[
- \lambda_{\min}(\mathcal K_N)=-\|W_N\|+O\bigl((\log\log N)^2\bigr)
- =-\Bigl(\frac{\pi}{e^3}+o(1)\Bigr)\log N,
-\]
-且 $\|\mathcal K_N\|=\bigl(\pi/e^3+o(1)\bigr)\log N$。
-\item[(v)] $\|\mathcal K_N\|_{\HS}\ll(\log N)^{3/2}$。
-\end{enumerate}
-所有隐含常数是绝对的。
+设 $N>e^{10}$ 为偶数，$\mathcal D_N$ 为对角算子 \eqref{eq:DN}。则
+$\mathcal D_N$ 是自伴、正、迹类的，且
+\begin{equation}\label{eq:main}
+ \|\mathcal D_N\|=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N .
+\end{equation}
 \end{theorem}
 
 \begin{corollary}\label{cor:HS}
-有 $\|\mathcal K_N\|_{\HS}\ll(\log N)^{3/2}$；特别地，\eqref{eq:split} 中模型
-分量满足的希尔伯特--施密特界比 \cite[命题 6.5]{LL} 中使用的界
-$\|\mathcal K_N\|_{\HS}\ll(\log N)^2$ 小一个因子 $(\log N)^{1/2}$。
+有 $\|\mathcal D_N\|_{\HS}\ll(\log N)^{3/2}$。
 \end{corollary}
 
+\eqref{eq:main} 中的算子范数比迹界 \eqref{eq:coarse} 小一个 $\log N$ 量级的
+因子，比推论~\ref{cor:HS} 的希尔伯特--施密特界小一个 $(\log N)^{1/2}$ 因子。
+常数 $\pi/e$ 不是方法的产物：它是 $\mathcal D_N$ 在主谱方向上的局部极限——
+一个卷积核——的范数。
+
 \begin{remark}\label{rem:eigenvector}
-\eqref{eq:w} 中的权重 $\varpi(x)=x-L_N+h_N$ 在 $[L_N,\infty)$ 上递增且无界，
-故它在该区间上没有最大值。真正进入估计的是乘积 $\varpi(x)e^{-2\alpha_Nx}$；
-由于
-\[
- \bigl(\varpi(x)e^{-2\alpha_Nx}\bigr)'
- =e^{-2\alpha_Nx}\bigl(1-2\alpha_N\varpi(x)\bigr),
-\]
-该乘积在
+证明表明 $\mathcal D_N$ 的顶特征向量集中在
 \begin{equation}\label{eq:peakpoint}
- x^*=L_N+\frac1{2\alpha_N}-h_N
+ y_D^*=\frac12+\frac1{2\alpha_N}
 \end{equation}
-处取得最大值，此时 $\varpi(x^*)=1/(2\alpha_N)$ 且
-\begin{equation}\label{eq:peakvalue}
- \varpi(x^*)e^{-2\alpha_Nx^*}
- =\frac{e^{-2\alpha_NL_N-1+2\alpha_Nh_N}}{2\alpha_N}.
-\end{equation}
-引理~\ref{lem:twosided} 下界中的试验函数支撑在 $x^*$ 附近、宽度为
-$\ll\alpha_N^{-1/2}$ 的窗口中；这就是“$W_N$ 的顶特征向量在 $x^*$ 附近集中”
-的准确含义。
+附近、宽度为 $\ll\alpha_N^{-1/2}$ 的窗口中。等价地说，$\mathcal D_N$ 的算子
+范数由 Fourier--Laplace 质量落在 $\log q\approx\frac12\log N$ 的素数幂上的
+函数取得。
 \end{remark}
 
 \begin{remark}\label{rem:numerical}
-对下文核 \eqref{eq:Gram} 作离散化，把
-$\bigl|X_1(\alpha_N+it)/(1+\alpha_N+it)\bigr|^2$ 换成 $(1+t^2)^{-1}$，当
+对下文模型核 \eqref{eq:model} 作离散化，当
 $\alpha_N=0.1$、$0.05$、$0.025$、$0.0125$ 时，最大特征值分别为
-$\pi/(e^3\alpha_N)$ 的 $0.730$、$0.850$、$0.923$、$0.972$ 倍；该比值单调
-趋于 $1$，与定理~\ref{thm:main}(iii) 相符。
+$\pi/(e\alpha_N)$ 的 $0.730$、$0.850$、$0.923$、$0.972$ 倍；该比值单调
+趋于 $1$，与 \eqref{eq:main} 相符。
 \end{remark}
 
 \subsection*{1.3.\ 方法}
 
-证明分四步。
+证明分五步。
 
 \begin{enumerate}
-\item[\rm(A)] \emph{欧拉乘积。} 振幅 $\mathscr A_N(w)$ 改写为
-$H_N(w)\zeta(1+w)\zeta(1-w)$，其中 $H_N=\mathfrak S(N)P_N/\zeta(1+w)$ 有显式
-欧拉乘积且在 $\operatorname{Re}w\ge0$ 上解析；我们估计 $H_N$ 在原点处的值以及
-前两阶导数（第~\ref{sec:amplitude} 节）。
-\item[\rm(B)] \emph{极点分解。} $\zeta(1+w)\zeta(1-w)$ 在 $w=0$ 处的二阶极点
-产生主部 $-w^{-2}-h_Nw^{-1}$；拉普拉斯恒等式把这一部分转化为负半定算子
-$-W_N$，其核 \eqref{eq:kW} 是显式核 $\Phi_x$ 的积分（第~\ref{sec:laurent} 节）。
-\item[\rm(C)] \emph{余项。} 余项核在原点附近与远离原点处分别估计；边界变量上的
-二重积分给出 $\|R_N\|_{\HS}\ll(\log\log(3N))^2$（第~\ref{sec:remainder} 节）。
-\item[\rm(D)] \emph{极点谱。} 通过两个变量 $x,y$ 下的核分析 $W_N$；与局部卷积核
-的双边比较把 $\|W_N\|$ 确定到相对 $o(1)$，外尔不等式把结果转移到
-$\mathcal K_N$（第~\ref{sec:polar}--\ref{sec:main} 节）。
+\item[\rm(A)] \emph{精确核。} 在 Fourier--Laplace 坐标 $y=\log q$ 下，
+$\mathcal D_N$ 成为积分算子，其核为
+\[
+ \mathscr D_N(y,u)=2\pi W_N(\min(y,u))\sqrt{m(y)m(u)},\qquad
+ W_N(y)=\sum_{q\le e^y}q\Lambda(q)^2 ,
+\]
+其中 $m(y)=e^{-2(1+\alpha_N)y}+e^{-2(1+\beta)y}$（第~\ref{sec:kernel} 节）。
+\item[\rm(B)] \emph{加权素数定理。} 权重 $W_N$ 在
+$y\in[c/\alpha_N,C/\alpha_N]$ 上一致满足
+$W_N(y)=\frac12e^{2y}(y-\frac12)(1+o(1))$（第~\ref{sec:pnt} 节）。
+\item[\rm(C)] \emph{模型核。} 在该区域中把 $\mathscr D_N$ 换成显式核
+\[
+ \mathscr A_N(y,u)=\pi\Bigl(\min(y,u)-\frac12\Bigr)
+ e^{-2\alpha_N\min(y,u)}e^{-(1+\alpha_N)|y-u|},
+\]
+其范数由 Schur 检验与匹配的试验向量算出（第~\ref{sec:model} 节）。
+\item[\rm(D)] \emph{比较。} 对 $y$ 轴作三区域分解，表明模型范数与
+$\mathcal D_N$ 的范数相差 $o(\alpha_N^{-1})$（第~\ref{sec:compare} 节）。
+\item[\rm(E)] \emph{合拢。} 由 $\|\mathscr A_N\|\sim\pi/(e\alpha_N)$ 即得定理
+（第~\ref{sec:proof} 节）。
 \end{enumerate}
 
 \subsection*{1.4.\ 约定}
 
 记 $f\ll g$ 与 $f=O(g)$ 表示 $|f|\le Cg$，$C$ 为绝对常数；下标表示常数依赖。
-除非另行说明，所有常数都是绝对的。我们不使用 $\mathrm{GRH}$ 或任何其他未证
-假设；模型算子 $\mathcal K_N$ 是解析对象。
+除非另行说明，所有常数都是绝对的。我们不使用任何未证假设：算子 $\mathcal D_N$
+的来源是算术的，但它的核估计是解析的。
 
-\section{预备}\label{sec:prelim}
+\section{哈代空间与精确核}\label{sec:kernel}
 
 \subsection*{2.1.\ 哈代空间}
 
@@ -230,712 +189,534 @@ $\mathcal K_N$（第~\ref{sec:polar}--\ref{sec:main} 节）。
  =\sup_{0<\eps<(\beta-\alpha_N)/2}
  \int_{\mathbb R}\bigl(|h(\alpha_N+\eps+it)|^2+|h(\beta-\eps+it)|^2\bigr)\dd t<\infty .
 \]
-边界值在 $L^2$ 中存在，且 \eqref{eq:inner} 成立；两条竖线各带通常的勒贝格
-测度。
-
-\subsection*{2.2.\ 模型核}
-
-核 \eqref{eq:kernel} 在条带内关于 $s$ 全纯，因为 $\mathscr A_N(w)$ 在
-$\operatorname{Re}w>0$ 上全纯，而边界点满足
-$\operatorname{Re}(s+\bar z)\ge2\alpha_N>0$。
-
-\begin{lemma}\label{lem:selfadjoint}
-对 $s,z\in\Gamma_N$ 有
-\[
- \kappa_N(s,z)=\overline{\kappa_N(z,s)} .
-\]
-因此，一旦知道 $\mathcal K_N$ 是希尔伯特--施密特算子，它就是自伴的。
-\end{lemma}
-
-\begin{proof}
-函数 $X_1$ 满足 $X_1(\bar z)=\overline{X_1(z)}$，而 $P_N$ 与 $\mathfrak S(N)$
-的系数为实数，故对 $\operatorname{Re}w>0$ 有
-$\mathscr A_N(\bar w)=\overline{\mathscr A_N(w)}$。于是
-\[
- \begin{aligned}
- \overline{\kappa_N(z,s)}
- &=\frac{X_1(\bar z)}{1+\bar z}\cdot\frac{X_1(s)}{1+s}\,
- e^{-L_N(\bar z+s)}\overline{\mathscr A_N(z+\bar s)}\\
- &=\frac{X_1(s)X_1(\bar z)}{(1+s)(1+\bar z)}\,
- e^{-L_N(s+\bar z)}\mathscr A_N(s+\bar z)
- =\kappa_N(s,z).
- \end{aligned}
-\]
-\end{proof}
-
-\begin{lemma}\label{lem:a}
-设 $0<\rho\le\beta$，$t\in\mathbb R$。则
-\begin{equation}\label{eq:abound}
- |X_1(\rho+it)|\asymp(1+|t|)^{-\rho},\qquad
- \int_{\mathbb R}\frac{|X_1(\rho+it)|^2}{|1+\rho+it|^2}\dd t\ll1,
-\end{equation}
-且对 $x\ge L_N$，
-\begin{equation}\label{eq:phibound}
- \int_{\Gamma_N}\frac{|X_1(s)|^2}{|1+s|^2}\,e^{-2x\Re s}\,|\mathrm ds|
- \ll e^{-2\alpha_Nx}.
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-斯特林公式给出 \eqref{eq:abound}；积分收敛是因为
-$|X_1(\rho+it)|^2/|1+\rho+it|^2\asymp(1+|t|)^{-2\rho-2}$。把边界积分拆到两条
-线上并用 \eqref{eq:abound} 即得 \eqref{eq:phibound}，因为 $\beta>\alpha_N$ 且
-$x\ge L_N>0$。
-\end{proof}
-
-\subsection*{2.3.\ 延拓}
-
-算子 \eqref{eq:K} 首先定义在 $\mathcal H_N$ 的稠密子空间上，该子空间由
-傅里叶--拉普拉斯密度具紧支集的函数组成；在这个子空间上，下文中所有积分绝对
-收敛。第~\ref{sec:remainder} 节的估计表明核在 $\Gamma_N\times\Gamma_N$ 上平方
-可积，故 $\mathcal K_N$ 延拓为 $\mathcal H_N$ 上的希尔伯特--施密特算子；恒等式
-$\mathcal K_N=-W_N+R_N$ 于是由连续性在 $\mathcal H_N$ 上成立。
-
-\section{模型振幅}\label{sec:amplitude}
-
-\subsection*{3.1.\ 一个欧拉乘积}
-
-\begin{lemma}\label{lem:euler}
-对 $\operatorname{Re}w>1$ 有
-\begin{equation}\label{eq:HN}
- \begin{aligned}
- H_N(w):={}&\frac{\mathfrak S(N)P_N(w)}{\zeta(1+w)}\\
- ={}&2(1-2^{-1-w})\prod_{\substack{p\mid N\\p>2}}\frac{p}{p-1}\bigl(1-p^{-1-w}\bigr)\\
- &\times\prod_{\substack{p>2\\p\nmid N}}\Bigl(1-\frac1{(p-1)^2}\Bigr)
- \Bigl(1+\frac{p^{-w}}{p-2}\Bigr)\bigl(1-p^{-1-w}\bigr).
- \end{aligned}
-\end{equation}
-右端在 $\operatorname{Re}w\ge0$ 上局部一致收敛，并定义 $H_N$ 到该半平面的
-解析延拓。
-\end{lemma}
-
-\begin{proof}
-对 $\operatorname{Re}w>1$，
-\[
- \frac1{\zeta(1+w)}=\prod_p(1-p^{-1-w})=(1-2^{-1-w})\prod_{p>2}(1-p^{-1-w}).
-\]
-代入 \eqref{eq:X1} 并把 $\prod_{p>2}$ 按 $p\mid N$ 与 $p\nmid N$ 拆开，
-$p\mid N$、$p>2$ 处的因子为
-\[
- \frac{p-1}{p-2}\Bigl(1-\frac1{(p-1)^2}\Bigr)\bigl(1-p^{-1-w}\bigr)
- =\frac{p}{p-1}\bigl(1-p^{-1-w}\bigr),
-\]
-而 $p\nmid N$、$p>2$ 处的因子为
-\[
- \Bigl(1-\frac1{(p-1)^2}\Bigr)\Bigl(1+\frac{p^{-w}}{p-2}\Bigr)\bigl(1-p^{-1-w}\bigr).
-\]
-这就给出 \eqref{eq:HN}。对 $\operatorname{Re}w\ge0$ 与 $p\nmid N$，最后一个
-因子等于 $1+O(p^{-2})$，关于 $w$ 一致，故乘积在该处局部一致收敛并定义解析函数；
-它在 $\operatorname{Re}w>1$ 上与 $H_N$ 一致，故在整个半平面上一致。
-\end{proof}
-
-\subsection*{3.2.\ 原点处的值与一阶导数}
-
-\begin{lemma}\label{lem:value}
-$H_N$ 在 $\operatorname{Re}w\ge0$ 上解析，且
-\begin{equation}\label{eq:HN0}
- H_N(0)=1,\qquad
- H_N'(0)=h_N:=\log2+\sum_{\substack{p\mid N\\p>2}}\frac{\log p}{p-1}.
-\end{equation}
-此外
-\begin{equation}\label{eq:hNbound}
- 0<h_N\ll\log\log(3N).
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-在 $w=0$ 处，$2(1-2^{-1})=1$，$p\mid N$ 的有限乘积等于
-$\prod p/(p-1)(1-1/p)=1$，而 $p\nmid N$ 的因子等于
-\[
- \Bigl(1-\frac1{(p-1)^2}\Bigr)\Bigl(1+\frac1{p-2}\Bigr)\Bigl(1-\frac1p\Bigr)
- =\frac{p(p-2)}{(p-1)^2}\cdot\frac{p-1}{p-2}\cdot\frac{p-1}{p}=1 ;
-\]
-故 $H_N(0)=1$。对导数，我们在 $w=0$ 处对 \eqref{eq:HN} 取对数导数。第一个
-因子贡献 $\log2\cdot2^{-1}/(1-2^{-1})=\log2$；$p\mid N$ 的因子贡献
-$(\log p)p^{-1}/(1-p^{-1})=\log p/(p-1)$；$p\nmid N$ 的因子贡献
-\[
- \begin{aligned}
- &-\frac{(\log p)p^{-w}}{p-2+p^{-w}}\Bigl|_{w=0}
- +\frac{(\log p)p^{-1-w}}{1-p^{-1-w}}\Bigl|_{w=0}\\
- &\qquad=-\frac{\log p}{p-1}+\frac{\log p}{p-1}=0 .
- \end{aligned}
-\]
-这就证明了 \eqref{eq:HN0}。对 \eqref{eq:hNbound}，我们用
-$\prod_{p\mid N}p\le N$ 与标准估计
-\[
- \sum_{p\mid N}\frac{\log p}{p}\ll\log\log(3N);
-\]
-$\log2$ 项无害。
-\end{proof}
-
-\subsection*{3.3.\ 导数界}
-
-\begin{lemma}\label{lem:der}
-对 $r=0,1,2$ 与 $\operatorname{Re}w\ge0$，
-\begin{equation}\label{eq:derbound}
- |H_N^{(r)}(w)|\ll_r(\log\log(3N))^{r+2}.
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-写 $H_N=\prod_pf_p$，局部因子为
-\[
- f_2(w)=2(1-2^{-1-w}),\qquad
- f_p(w)=\frac{p}{p-1}\bigl(1-p^{-1-w}\bigr)\quad(p\mid N,\ p>2),
-\]
-\[
- f_p(w)=\Bigl(1-\frac1{(p-1)^2}\Bigr)\Bigl(1+\frac{p^{-w}}{p-2}\Bigr)
- \bigl(1-p^{-1-w}\bigr)\quad(p\nmid N,\ p>2).
-\]
-对 $\operatorname{Re}w\ge0$ 置 $z=p^{-w}$，则 $|z|\le1$。
-
-\emph{局部估计。} 对 $p\nmid N$，恒等式
-\[
- \Bigl(1+\frac{z}{p-2}\Bigr)\Bigl(1-\frac zp\Bigr)
- =1+\frac{2z-z^2}{p(p-2)}
-\]
-给出
-\[
- f_p-1=\frac{2z-z^2}{p(p-2)}\Bigl(1-\frac1{(p-1)^2}\Bigr)-\frac1{(p-1)^2},
-\]
-故 $|f_p-1|\ll p^{-2}$；又因 $z'=-(\log p)z$，求导得
-\[
- |f_p^{(r)}(w)|\ll_r(\log p)^rp^{-2}\qquad(r=1,2).
-\]
-对 $p\mid N$、$p>2$，有 $f_p=1+(1-z)/(p-1)$，故 $|f_p-1|\le2/(p-1)$，且
-$r=1,2$ 时 $|f_p^{(r)}(w)|\ll_r(\log p)^r/(p-1)$。$p=2$ 的贡献及其导数为
-$O(1)$。
-
-\emph{求和。} 由于 $\prod_{p\mid N}p\le N$，
-\begin{equation}\label{eq:sums}
- \begin{gathered}
- \sum_{p\mid N}\frac1{p-1}\ll\log\log\log(3N),\qquad
- \sum_{p\mid N}\frac{\log p}{p-1}\ll\log\log(3N),\\
- \sum_{p\mid N}\frac{(\log p)^2}{p-1}\ll(\log\log(3N))^2.
- \end{gathered}
-\end{equation}
-且 $\sum_{p}(\log p)^jp^{-2}\ll_j1$。因此
-\[
- |H_N|\le\prod_p(1+|f_p-1|)\le\exp\Bigl(2\sum_{p\mid N}\frac1{p-1}+O(1)\Bigr)\ll(\log\log(3N))^2 .
-\]
-对导数，我们直接对乘积求导而不做除法：
-\[
- H_N'=\sum_pf_p'\prod_{q\ne p}f_q,\qquad
- H_N''=\sum_pf_p''\prod_{q\ne p}f_q+\sum_{p\ne q}f_p'f_q'\prod_{r\ne p,q}f_r .
-\]
-对每个 $p$，$\prod_{q\ne p}|f_q|\le\prod_{q\ne p}(1+|f_q-1|)\ll(\log\log(3N))^2$，且由
-\eqref{eq:sums} 有 $\sum_p|f_p'|\ll\log\log(3N)$、$\sum_p|f_p''|\ll(\log\log(3N))^2$。因此
-\[
- \begin{aligned}
- |H_N'|&\ll(\log\log(3N))^2\sum_p|f_p'|\ll(\log\log(3N))^3,\\
- |H_N''|&\ll(\log\log(3N))^2\Bigl(\sum_p|f_p''|+\bigl(\sum_p|f_p'|\bigr)^2\Bigr)
- \ll(\log\log(3N))^4 .
- \end{aligned}
-\]
-这就证明了 \eqref{eq:derbound}。
-\end{proof}
-
-\begin{remark}\label{rem:zero}
-关于 $p\nmid N$ 的乘积可能在虚轴上的孤立点为零（例如 $p=3$、
-$w=(2k+1)\pi i/\log3$ 处），但上述估计通过逐项对乘积求导得到，不需要对数
-导数。
-\end{remark}
-
-\begin{remark}\label{rem:sharp}
-\eqref{eq:derbound} 中的指数是最优的：取 $N=\prod_{p\le y}p$，则
-$\log\log(3N)\asymp\log y$；由 $\{t\log p\bmod2\pi\}_{p\le y}$ 在环面上的稠密性，存在
-$t$ 使所有因子 $|1-p^{-1-it}|$ 都接近 $1+p^{-1}$；在这些点上
-$|H_N(it)|\asymp\prod_{p\le y}(p+1)/(p-1)\asymp(\log\log(3N))^2$，同理
-$|H_N'|\asymp(\log\log(3N))^3$、$|H_N''|\asymp(\log\log(3N))^4$。在原点处数值要小得多：
-$H_N(0)=1$、$H_N'(0)=h_N\ll\log\log(3N)$，且
-\[
- H_N''(0)=h_N^2+\sum_{\substack{p\mid N\\p>2}}\frac{(\log p)^2(p-2)}{(p-1)^2}+O(1)\ll(\log\log(3N))^2 .
-\]
-\end{remark}
-
-\section{原点处的洛朗展开}\label{sec:laurent}
-
-\subsection*{4.1.\ $\zeta$ 乘积}
-
-\begin{lemma}\label{lem:zeta}
-在 $w=0$ 的邻域内，
-\begin{equation}\label{eq:zetaprod}
- \zeta(1+w)\zeta(1-w)=-\frac1{w^2}+\gamma^2+2\gamma_1+O(w^2),
-\end{equation}
-其中 $\gamma$ 是欧拉常数，$\gamma_1$ 是第一个斯蒂尔切斯常数。
-\end{lemma}
-
-\begin{proof}
-函数 $w\mapsto\zeta(1+w)\zeta(1-w)$ 是偶函数，故其关于 $w=0$ 的洛朗展开只含
-$w$ 的偶次幂。洛朗展开
-\[
- \zeta(1+w)=\frac1w+\gamma-\gamma_1w+O(w^2),\qquad
- \zeta(1-w)=-\frac1w+\gamma+\gamma_1w+O(w^2)
-\]
-相乘即得 \eqref{eq:zetaprod}，其中奇次项为零。
-\end{proof}
-
-\subsection*{4.2.\ 主部}
-
-\begin{proposition}\label{prop:laurent}
-存在绝对常数 $\delta>0$，使得对 $|w|\le2\delta$、$\operatorname{Re}w\ge0$，
-\begin{equation}\label{eq:laurent}
- \mathscr A_N(w)=-\frac1{w^2}-\frac{h_N}{w}+R_N^{(0)}(w),
-\end{equation}
-其中 $R_N^{(0)}$ 在该半圆盘上全纯，且
-\begin{equation}\label{eq:R0}
- R_N^{(0)}(w)=c_0+O\bigl((\log\log(3N))^4\bigr),
- \qquad c_0=\gamma^2+2\gamma_1,
-\end{equation}
-特别地
-\begin{equation}\label{eq:R0near}
- |R_N^{(0)}(w)|\ll(\log\log(3N))^4 .
-\end{equation}
-\end{proposition}
-
-\begin{proof}
-由 \eqref{eq:HN} 与引理~\ref{lem:zeta}，
-\[
- \mathscr A_N(w)=H_N(w)\zeta(1+w)\zeta(1-w).
-\]
-由引理~\ref{lem:der} 取 $r=2$，并对从 $0$ 到 $w$ 的线段（它落在
-$\operatorname{Re}w\ge0$ 内）用泰勒公式，
-\[
- H_N(w)=1+h_Nw+O(w^2(\log\log(3N))^4),\qquad |w|\le2\delta,\quad\operatorname{Re}w\ge0 .
-\]
-乘以 \eqref{eq:zetaprod} 并减去两个极点项，即得 \eqref{eq:laurent}，其中
-\[
- R_N^{(0)}(w)=c_0+O((\log\log(3N))^4)+O(w)+O(w^2(\log\log(3N))^4),
-\]
-它全纯；这里的第一个误差来自 $O(w^2(\log\log(3N))^4)\cdot(-w^{-2})$。这就给出
-\eqref{eq:R0}。
-\end{proof}
-
-\subsection*{4.3.\ 拉普拉斯表示}
-
-\begin{lemma}\label{lem:laplace}
-对 $\operatorname{Re}w>0$，
-\begin{equation}\label{eq:laplace1}
- \frac{e^{-L_Nw}}{w^2}=\int_{L_N}^{\infty}(x-L_N)e^{-xw}\dd x,
+边界值在 $L^2$ 中存在，且 \eqref{eq:inner} 成立。Fourier--Laplace 表示为
+\begin{equation}\label{eq:PW}
+ h(s)=\frac1{\sqrt{2\pi}}\int_{\mathbb R}\psi(\tau)e^{s\tau}\dd\tau,
  \qquad
- \frac{e^{-L_Nw}}{w}=\int_{L_N}^{\infty}e^{-xw}\dd x .
+ \|h\|^2_{\mathcal H_N}=\int_{\mathbb R}|\psi(\tau)|^2w_H(\tau)\dd\tau,
+\end{equation}
+其中 $w_H(\tau)=e^{2\alpha_N\tau}+e^{2\beta\tau}$（见 \cite[引理 5.2]{LL}）。
+
+\subsection*{2.2.\ 核}
+
+\begin{lemma}\label{lem:kernel}
+对 $s,z\in\Gamma_N$，
+\begin{equation}\label{eq:kernel}
+ \kappa_N(s,z):=\sum_{(n,N)=1}\frac{\Lambda^2(n)}{n}\,d_n(s)\overline{d_n(z)}
+ =\sum_q q\Lambda(q)^2\varphi_q(s)\overline{\varphi_q(z)} .
+\end{equation}
+因此 $\mathcal D_N$ 自伴、正，且
+\begin{equation}\label{eq:trace}
+ \operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}.
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-在第一个积分中作代换 $u=x-L_N$ 得
-$e^{-L_Nw}\int_0^\infty ue^{-uw}\dd u=e^{-L_Nw}/w^2$；第二个是初等的。
+两个表达式相等，因为 $d_n=n\varphi_n$ 而权重为 $q\Lambda(q)^2$；更精确地，
+$q\Lambda(q)^2\varphi_q\otimes\varphi_q=\Lambda(q)^2q^{-1}d_q\otimes d_q$。
+该算子是系数非负的秩一算子 $\varphi\otimes\varphi$ 之和，故正且自伴。最后，
+\[
+ \|\varphi_q\|^2=\sum_{\rho\in\{\alpha_N,\beta\}}q^{-2(1+\rho)}
+ \int_{\mathbb R}\frac{\dd t}{(1+\rho)^2+t^2}
+ =\pi\sum_{\rho\in\{\alpha_N,\beta\}}\frac{q^{-2(1+\rho)}}{1+\rho},
+\]
+故
+\[
+ \operatorname{tr}\mathcal D_N
+ =\pi\sum_{\rho\in\{\alpha_N,\beta\}}\frac1{1+\rho}
+ \sum_q\Lambda(q)^2q^{-1-2\rho}\ll\alpha_N^{-2},
+\]
+因为当 $0<\rho\le\beta$ 时 $\sum_q\Lambda(q)^2q^{-1-2\rho}\asymp(2\rho)^{-2}$。
 \end{proof}
 
-\subsection*{4.4.\ 极点算子}
+\subsection*{2.3.\ Fourier--Laplace 坐标}
 
-\begin{proposition}\label{prop:polar}
-\eqref{eq:kW} 中的算子 $W_N$ 是有定义的、正且迹类的，并且
-\begin{equation}\label{eq:tracepole}
- \tr W_N=\int_{L_N}^{\infty}\varpi(x)\int_{\Gamma_N}\frac{|X_1(s)|^2}{|1+s|^2}
- e^{-2x\Re s}\,|\mathrm ds|\,\mathrm dx<\infty .
+置
+\begin{equation}\label{eq:m}
+ y=-\tau,\qquad m(y)=e^{-2(1+\alpha_N)y}+e^{-2(1+\beta)y},
 \end{equation}
-此外 $W_N=-\mathcal K_N^{pole}$，其中 $\mathcal K_N^{pole}$ 的核是 $\kappa_N$ 在 $w=0$ 处的
-主部。
-\end{proposition}
+对 $h\in\mathcal H_N$（变换为 $\psi$）令 $f(y)=\psi(-y)\sqrt{w_H(-y)}$。则
+$y\mapsto f$ 是从 $\mathcal H_N$ 到 $L^2(\mathbb R,\dd y)$ 的酉映射，且
+\begin{equation}\label{eq:unit}
+ \|h\|_{\mathcal H_N}=\|f\|_{L^2(\dd y)} .
+\end{equation}
+设 $y_0=\log q_1$，其中 $q_1$ 是与 $N$ 互素的最小素数幂。由于 $N$ 为偶数，
+$q_1\ge3$，故在下文核的支集上
+\begin{equation}\label{eq:y0}
+ y\ge y_0\ge\log3>\frac12 .
+\end{equation}
+
+\begin{lemma}\label{lem:FL}
+在酉映射 \eqref{eq:unit} 下，算子 $\mathcal D_N$ 成为 $L^2(\dd y)$ 上的积分
+算子，核为
+\begin{equation}\label{eq:Dkernel}
+ \mathscr D_N(y,u)=2\pi\,W_N(\min(y,u))\,\sqrt{m(y)m(u)},
+ \qquad
+ W_N(y)=\sum_{\substack{q\le e^y\\(q,N)=1}}q\Lambda(q)^2 .
+\end{equation}
+特别地，$\mathscr D_N(y,u)=0$ 除非 $y,u\ge y_0$。
+\end{lemma}
 
 \begin{proof}
-对 $s,z\in\Gamma_N$ 置 $w=s+\bar z$，则 $\operatorname{Re}w\ge2\alpha_N>0$。
-由 \eqref{eq:laurent} 与引理~\ref{lem:laplace}，$\kappa_N$ 的主部等于
+对 $s\in\Gamma_N$，
 \[
- \frac{X_1(s)X_1(\bar z)}{(1+s)(1+\bar z)}e^{-L_Nw}
- \Bigl(-\frac1{w^2}-\frac{h_N}{w}\Bigr)
- =-\int_{L_N}^{\infty}\varpi(x)\,\Phi_x(s,z)\dd x=-\kappa_W(s,z).
+ \varphi_q(s)=\frac{q^{-1-s}}{1+s}=\int_{\log q}^{\infty}e^{-(1+s)v}\dd v
+ =\int_{-\infty}^{-\log q}e^{(1+s)\tau}\dd\tau,
 \]
-故 $\mathcal K_N^{pole}$ 的核为 $-\kappa_W$，即 $W_N=-\mathcal K_N^{pole}$。对
-$h\in\mathcal H_N$，$W_N$ 的二次型为
+故在 \eqref{eq:PW} 中 $\psi_q(\tau)=\sqrt{2\pi}e^{\tau}\mathbf 1_{\tau\le-\log q}$。
+在加权表示 $L^2(w_H\dd\tau)$ 中，$\varphi_q\otimes\varphi_q$ 的核为
+$2\pi e^{\tau+\tau'}\mathbf 1_{\tau,\tau'\le-\log q}$。经 $\psi\mapsto\psi\sqrt{w_H}$
+单位化并令 $y=-\tau$，得
 \[
- \langle W_Nh,h\rangle
- =\int_{L_N}^{\infty}\varpi(x)\Bigl|\int_{\Gamma_N}
- \frac{h(s)X_1(\bar s)}{1+\bar s}e^{-\bar s x}\,|\mathrm ds|\Bigr|^2\dd x\ge0,
+ 2\pi e^{-y-u}\sqrt{w_H(-y)w_H(-u)}\mathbf 1_{y,u\ge\log q}
+ =2\pi\sqrt{m(y)m(u)}\mathbf 1_{y,u\ge\log q} .
 \]
-故 $W_N\ge0$。迹公式 \eqref{eq:tracepole} 由同一核沿对角线积分得到；由
-\eqref{eq:phibound} 它有限，因为
-$\int_{L_N}^{\infty}\varpi(x)e^{-2\alpha_Nx}\dd x<\infty$。
+对 $q\le\min(e^y,e^u)$ 以权重 $q\Lambda(q)^2$ 求和即得 \eqref{eq:Dkernel}。
 \end{proof}
 
-\section{余项}\label{sec:remainder}
+\section{加权素数定理与模型核}\label{sec:pnt}
 
-\subsection*{5.1.\ 余项核}
+\subsection*{3.1.\ 加权素数定理}
 
-由 \eqref{eq:laurent}，差 $\mathcal K_N+W_N$ 的核为
-\begin{equation}\label{eq:Rkernel}
- \kappa_{R_N}(s,z)=\frac{X_1(s)X_1(\bar z)}{(1+s)(1+\bar z)}\,
- e^{-L_N(s+\bar z)}R_N^{(0)}(s+\bar z),
+\begin{lemma}\label{lem:pnt}
+对 $x\ge2$，
+\begin{equation}\label{eq:pnt}
+ \sum_{p\le x}p(\log p)^2
+ =\frac12x^2\log x-\frac14x^2+O\bigl(x^2(\log x)^Ce^{-c\sqrt{\log x}}\bigr),
 \end{equation}
-其中 $R_N^{(0)}$ 是命题~\ref{prop:laurent} 的全纯函数。
+其中 $C,c>0$ 为绝对常数。
+\end{lemma}
 
-\subsection*{5.2.\ 远离原点}
+\begin{proof}
+由形如
+$\theta(x)=\sum_{p\le x}\log p=x+O(xe^{-c\sqrt{\log x}})$ 的素数定理与部分求和，
+\[
+ \sum_{p\le x}p(\log p)^2=\int_2^x t\log t\,\dd\theta(t)
+ =\int_2^x t\log t\,\dd t+O\bigl(x^2(\log x)^Ce^{-c\sqrt{\log x}}\bigr),
+\]
+而 $\int_2^x t\log t\,\dd t=\frac12x^2\log x-\frac14x^2+O(1)$。
+\end{proof}
 
-\begin{lemma}\label{lem:far}
-设 $\eps>0$ 且 $|w|\ge2\delta$、
-$0\le\operatorname{Re}w\le2\beta=\frac14$。则
-\begin{equation}\label{eq:far}
- |R_N^{(0)}(w)|\ll_{\delta,\eps}
- (\log\log(3N))^2(2+|\Im w|)^{1/8+\eps}\log(2+|\Im w|).
+\begin{remark}\label{rem:primepowers}
+高次素数幂 $q=p^a$（$a\ge2$）对 $\sum_{q\le x}q\Lambda(q)^2$ 的贡献为
+$\ll x^{3/2}\log^2x$；而限制 $(q,N)=1$ 只去掉整除 $N$ 的素数的幂，其总贡献为
+$\ll x\log^2N$。在下面的范围内两者都是低阶项。
+\end{remark}
+
+\subsection*{3.2.\ $W_N$ 的渐近}
+
+\begin{lemma}\label{lem:W}
+对固定的 $0<c<C<\infty$ 与 $y\in[c/\alpha_N,C/\alpha_N]$，有
+\begin{equation}\label{eq:W}
+ W_N(y)=\frac12e^{2y}\Bigl(y-\frac12\Bigr)\bigl(1+o(1)\bigr),
+\end{equation}
+且在该范围内一致。
+\end{lemma}
+
+\begin{proof}
+取 $x=e^y$，由引理~\ref{lem:pnt}，
+\[
+ W_N(y)=\frac12e^{2y}y-\frac14e^{2y}+O\bigl(e^{2y}y^Ce^{-c\sqrt{y}}\bigr)
+ =e^{2y}\Bigl(\frac y2-\frac14\Bigr)(1+o(1)),
+\]
+而 $\frac y2-\frac14=\frac12(y-\frac12)$。低阶项即注~\ref{rem:primepowers}
+中的项；误差在 $y\in[c/\alpha_N,C/\alpha_N]$ 上一致，因为
+$e^{-c\sqrt{y}}\to0$ 而 $y^C$ 被 $\alpha_N^{-1}$ 的幂控制。
+\end{proof}
+
+\subsection*{3.3.\ 模型核}
+
+在 \eqref{eq:W} 成立的区域中，$\sqrt{m(y)m(u)}$ 里的第二边界项指数小：
+\begin{equation}\label{eq:second}
+ \sqrt{m(y)m(u)}
+ =e^{-(1+\alpha_N)(y+u)}
+ \bigl(1+O(e^{-2(\beta-\alpha_N)\min(y,u)})\bigr).
+\end{equation}
+事实上 $m(y)=e^{-2(1+\alpha_N)y}(1+e^{-2(\beta-\alpha_N)y})$，而当
+$y\ge c/\alpha_N$ 时 $e^{-2(\beta-\alpha_N)y}\le e^{-2(\beta-\alpha_N)c/\alpha_N}\to0$。
+这引出如下定义。
+
+\begin{definition}\label{def:model}
+模型核为
+\begin{equation}\label{eq:model}
+ \mathscr A_N(y,u)=\pi\Bigl(\min(y,u)-\frac12\Bigr)
+ e^{-2\alpha_N\min(y,u)}e^{-(1+\alpha_N)|y-u|},
+ \qquad y,u\ge y_0 .
+\end{equation}
+\end{definition}
+
+\begin{lemma}\label{lem:close}
+对固定的 $0<c<C<\infty$ 与 $y,u\in I_0=[c/\alpha_N,C/\alpha_N]$，
+\begin{equation}\label{eq:close}
+ \mathscr D_N(y,u)=\mathscr A_N(y,u)\bigl(1+O(\epsilon_N(c,C))\bigr),
+ \qquad \epsilon_N(c,C)\longrightarrow0 .
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-对 $|w|\ge2\delta$ 有
-$R_N^{(0)}(w)=\mathscr A_N(w)+w^{-2}+h_Nw^{-1}$，后两项为
-$O_\delta(1+h_N)=O_\delta(\log\log(3N))$。只需估计
-$\mathscr A_N=H_N\zeta(1+w)\zeta(1-w)$。
-
-由引理~\ref{lem:der} 取 $r=0$，$|H_N(w)|\ll(\log\log(3N))^2$。对因子
-$\zeta(1+w)$ 分两种情形。
-若 $\Re w\ge\delta/2$，则 $\operatorname{Re}(1+w)\ge1+\delta/2>1$，且
-$|\zeta(1+w)|\le\zeta(1+\delta/2)\ll_\delta1$。若 $\Re w<\delta/2$，则
-$|w|\ge2\delta$ 迫使 $|\Im w|\ge\sqrt3\delta/2$，而对半平面
-$\operatorname{Re}s\ge1$ 的标准估计给出
-$|\zeta(1+w)|\ll_\delta\log(2+|\Im w|)$。对因子 $\zeta(1-w)$，
-$1-\Re w\in[\frac34,1)$ 的凸性界给出
+在 $I_0$ 上，引理~\ref{lem:W} 一致地给出
+$W_N(\min)=\frac12e^{2\min}(\min-\frac12)(1+o(1))$，而 \eqref{eq:second}
+给出第二个因子。相乘得
 \[
- |\zeta(1-w)|\ll_\eps(2+|\Im w|)^{\Re w/2+\eps}\le(2+|\Im w|)^{1/8+\eps}.
+ \begin{aligned}
+ \mathscr D_N
+ &=2\pi\cdot\frac12 e^{2\min}\Bigl(\min-\frac12\Bigr)e^{-(1+\alpha_N)(y+u)}(1+o(1))\\
+ &=\pi\Bigl(\min-\frac12\Bigr)e^{2\min-(1+\alpha_N)(y+u)}(1+o(1)).
+ \end{aligned}
 \]
-这就证明了 \eqref{eq:far}。
+由于 $2\min-(1+\alpha_N)(y+u)=-2\alpha_N\min-(1+\alpha_N)|y-u|$，这正是
+\eqref{eq:model}，相对误差为 $o(1)$。
 \end{proof}
 
-\subsection*{5.3.\ 原点附近}
+\section{模型算子的范数}\label{sec:model}
 
-\begin{lemma}\label{lem:near}
-对 $|w|\le2\delta$、$\operatorname{Re}w\ge0$，有
-\begin{equation}\label{eq:near}
- |R_N^{(0)}(w)|\ll_\delta(\log\log(3N))^2 .
+本节中 $\mathscr A_N$ 始终表示 $[y_0,\infty)\times[y_0,\infty)$ 上的核
+\eqref{eq:model}，并视为 $L^2([y_0,\infty))$ 上的算子。
+
+\subsection*{4.1.\ Schur 检验}
+
+置
+\begin{equation}\label{eq:Valpha}
+ V_\alpha(y)=\Bigl(y-\frac12\Bigr)e^{-2\alpha_Ny},\qquad y\ge y_0 .
 \end{equation}
-\end{lemma}
+则 $\mathscr A_N(y,u)=\pi V_\alpha(\min(y,u))e^{-(1+\alpha_N)|y-u|}$。
 
-\begin{proof}
-记 $L=\log\log(3N)$。
-
-\emph{圆弧。} 设 $|w|=2\delta$、$\operatorname{Re}w\ge0$。由引理~\ref{lem:far}，
-\[
- |R_N^{(0)}(w)|\ll_{\delta,\eps}L^2(2+|\Im w|)^{1/8+\eps}\log(2+|\Im w|)
- \ll_\delta L^2 .
-\]
-
-\emph{直径。} 设 $f_p$ 为引理~\ref{lem:der} 的局部因子。在半圆盘
-$\{|w|\le2\delta,\ \operatorname{Re}w\ge0\}$ 上每个 $f_p$ 非零——因子的零点都在
-其外（$p\mid N$ 时零点满足 $|p^{-w}|=p$；$\operatorname{Re}w\ge0$ 上的零点只可能
-来自 $p=3$，位于 $w=(2k+1)\pi i/\log3$，$|w|>\pi/\log3$）——故存在
-$\log H_N=\sum_p\log f_p$ 的全纯分支 $g$，且 $g(0)=0$。于是 $g'(0)=h_N$，且
-\[
- |g''(w)|\ll\sum_p\Bigl|\frac{f_p''}{f_p}-\Bigl(\frac{f_p'}{f_p}\Bigr)^2\Bigr|
- \ll L^2,
-\]
-因为 $p\mid N$ 时 $|\partial_w^2\log f_p(w)|\ll(\log p)^2/p$，$p\nmid N$ 时
-$\ll(\log p)^2/p^2$，而 $p=2$ 贡献 $O(1)$。沿从 $0$ 到 $it$ 的线段用泰勒公式
-（余项写成积分形式，并利用 $g''$ 在 $\operatorname{Re}w\ge0$ 上的连续性），得
-\[
- g(it)=ith_N+O(t^2L^2),\qquad\text{从而}\qquad
- H_N(it)=1+ith_N+O(t^2L^2).
-\]
-由引理~\ref{lem:zeta}，对 $Z(w)=\zeta(1+w)\zeta(1-w)$ 有
-$Z(it)=t^{-2}+c_0+O(t^2)$；又由引理~\ref{lem:der} 取 $r=0$ 得
-$|H_N(it)|\ll L^2$。由 \eqref{eq:laurent}，
-$R_N^{(0)}=H_NZ+w^{-2}+h_Nw^{-1}$，故对 $0<|t|\le2\delta$ 有
-\[
- R_N^{(0)}(it)=\frac{H_N(it)-1-ith_N}{t^2}+c_0H_N(it)+O(L^2t^2)=O(L^2),
-\]
-而 $t=0$ 处由连续性得同样界。
-
-\emph{结论。} $R_N^{(0)}$ 在半圆盘
-$\{|w|<2\delta,\ \operatorname{Re}w>0\}$ 上全纯、在其闭包上连续；圆弧与直径上
-都界以 $C_\delta L^2$，故由最大模原理得 \eqref{eq:near}。
-\end{proof}
-
-\subsection*{5.4.\ 希尔伯特--施密特估计}
-
-\begin{proposition}\label{prop:HS}
-对每个 $0<\eps<3/8$，
-\begin{equation}\label{eq:HS}
- \|R_N\|_{\HS}^2\ll_\eps(\log\log(3N))^4
- \iint_{\mathbb R^2}
- \frac{(2+|t-u|)^{1/4+2\eps}\log^2(2+|t-u|)}
-      {(1+t^2)(1+u^2)}\,\mathrm dt\,\mathrm du ,
+\begin{lemma}\label{lem:schur}
+对 $u\le y$，
+\begin{equation}\label{eq:ratio}
+ \frac{V_\alpha(u)}{V_\alpha(y)}e^{-(1+\alpha_N)(y-u)}
+ \le e^{-(1-\alpha_N)(y-u)},
 \end{equation}
 从而
-\begin{equation}\label{eq:HSbound}
- \|R_N\|_{\HS}\ll(\log\log(3N))^2 .
+\begin{equation}\label{eq:schur}
+ \sup_{y\ge y_0}\int_{y_0}^{\infty}\mathscr A_N(y,u)\dd u
+ \le\pi\|V_\alpha\|_\infty
+ \Bigl(\frac1{1-\alpha_N}+\frac1{1+\alpha_N}\Bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+对 $u\le y$，有 $(u-\frac12)/(y-\frac12)\le1$ 与
+$e^{-2\alpha_N(u-y)}=e^{2\alpha_N(y-u)}$，这给出 \eqref{eq:ratio}。于是
+\[
+ \int_{y_0}^{y}\mathscr A_N(y,u)\dd u
+ \le\pi\|V_\alpha\|_\infty\int_{y_0}^{y}e^{-(1-\alpha_N)(y-u)}\dd u
+ \le\frac{\pi\|V_\alpha\|_\infty}{1-\alpha_N},
+\]
+且
+\[
+ \int_{y}^{\infty}\mathscr A_N(y,u)\dd u
+ =\pi V_\alpha(y)\int_0^{\infty}e^{-(1+\alpha_N)v}\dd v
+ \le\frac{\pi\|V_\alpha\|_\infty}{1+\alpha_N}.
+\]
+两式相加即得 \eqref{eq:schur}。
+\end{proof}
+
+\subsection*{4.2.\ 峰值}
+
+\begin{lemma}\label{lem:peak}
+函数 $V_\alpha$ 在 $[y_0,\infty)$ 上的最大值在
+\begin{equation}\label{eq:ystar}
+ y_D^*=\frac12+\frac1{2\alpha_N}
+\end{equation}
+处取得，且
+\begin{equation}\label{eq:peak}
+ V_\alpha(y_D^*)=\frac{e^{-1-\alpha_N}}{2\alpha_N}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+$V_\alpha'(y)=e^{-2\alpha_Ny}[1-2\alpha_N(y-\frac12)]$ 在 $y_D^*$ 处为零，
+且在该点由正变负；对大 $N$ 有 $y_D^*>y_0$。代入即得数值。
+\end{proof}
+
+\begin{proposition}\label{prop:schur}
+有
+\begin{equation}\label{eq:upper}
+ \|\mathscr A_N\|\le\frac{\pi e^{-1-\alpha_N}}{\alpha_N(1-\alpha_N^2)}
+ =\frac{\pi}{e\alpha_N}(1+o(1)).
 \end{equation}
 \end{proposition}
 
 \begin{proof}
-由 \eqref{eq:Rkernel}，
-\[
- \|R_N\|_{\HS}^2
- =\int_{\Gamma_N}\int_{\Gamma_N}
- \frac{|X_1(s)|^2|X_1(z)|^2}{|1+s|^2|1+\bar z|^2}\,
- e^{-2L_N\operatorname{Re}(s+\bar z)}
- |R_N^{(0)}(s+\bar z)|^2\,|\mathrm ds|\,|\mathrm dz| .
-\]
-由于 $\operatorname{Re}(s+\bar z)\ge2\alpha_N$ 且 $L_N>0$，指数至多为 $1$。
-写 $s=\rho+it$、$z=\rho'+iu$，$\rho,\rho'\in\{\alpha_N,\beta\}$。近原点区域
-$|s+\bar z|\le2\delta$ 由 \eqref{eq:near} 与 \eqref{eq:abound} 贡献
-$O_\delta((\log\log(3N))^4)$。在其余区域，\eqref{eq:far} 适用（$\Im w=t-u$），
-而 \eqref{eq:abound} 给出因子 $(1+t^2)^{-1}(1+u^2)^{-1}$。这给出
-\eqref{eq:HS}。
-
-还需验证二重积分收敛。取 $0<\eps<3/8$，置 $\theta=\frac14+2\eps<1$。由于
-$(2+|t-u|)^\theta\ll_\theta(2+|t|)^\theta(2+|u|)^\theta$，有
-\[
- \iint_{\mathbb R^2}\frac{(2+|t-u|)^\theta\log^2(2+|t-u|)}
-      {(1+t^2)(1+u^2)}\dd t\dd u
- \ll_\theta\Bigl(\int_{\mathbb R}\frac{(2+|t|)^\theta\log^2(2+|t|)}{1+t^2}\dd t\Bigr)^2<\infty,
-\]
-收敛性由 $\theta<1$ 得出。这就证明了 \eqref{eq:HSbound}。
+把 \eqref{eq:schur} 与 \eqref{eq:peak} 结合。
 \end{proof}
 
-\begin{proof}[定理~\ref{thm:main}(i)--(ii) 证明的完成]
-恒等式 $\mathcal K_N=-W_N+R_N$ 是由 \eqref{eq:laurent} 结合 \eqref{eq:kW}
-与 \eqref{eq:Rkernel} 得到的核恒等式。由于 $W_N$ 由命题~\ref{prop:polar}
-是迹类的、$R_N$ 由命题~\ref{prop:HS} 是希尔伯特--施密特的，$\mathcal K_N$ 是
-希尔伯特--施密特算子；其自伴性由引理~\ref{lem:selfadjoint} 给出。这就证明了
-(i) 与 (ii)。
-\end{proof}
+\subsection*{4.3.\ 匹配下界}
 
-\section{极点算子}\label{sec:polar}
-
-\subsection*{6.1.\ 两变量下的核}
-
-对 $x,y\ge L_N$ 置
-\begin{equation}\label{eq:Gram}
- \mathscr G(x,y)=\int_{\Gamma_N}\frac{X_1(s)X_1(\bar s)}{|1+s|^2}
- e^{-xs-\bar sy}\,|\mathrm ds| .
-\end{equation}
-在两条线上代入 $s=\rho+it$ 得
-\begin{equation}\label{eq:g}
- \mathscr G(x,y)=\sum_{\rho\in\{\alpha_N,\beta\}}e^{-\rho(x+y)}\,g_\rho(x-y),
-\end{equation}
-其中
-\begin{equation}\label{eq:grho}
- g_\rho(v)=\int_{\mathbb R}\frac{|X_1(\rho+it)|^2}{|1+\rho+it|^2}
- e^{-itv}\dd t,\qquad \rho\in\{\alpha_N,\beta\}.
-\end{equation}
-
-\begin{lemma}\label{lem:gram}
-每个 $g_\rho$ 是实值、偶的、正定的，且
-\begin{equation}\label{eq:gmass}
- \int_{\mathbb R}g_\rho(v)\dd v=2\pi\,\frac{|X_1(\rho)|^2}{|1+\rho|^2} .
-\end{equation}
-此外，对 $h\in\mathcal H_N$，
-\begin{equation}\label{eq:qform}
- \langle W_Nh,h\rangle
- =\int_{L_N}^{\infty}\varpi(x)\Bigl|\int_{\Gamma_N}
- \frac{h(s)X_1(\bar s)}{1+\bar s}e^{-\bar s x}\,|\mathrm ds|\Bigr|^2\dd x,
-\end{equation}
-且 $\|W_N\|$ 等于 $L^2([L_N,\infty))$ 上以
-\begin{equation}\label{eq:Wkernel}
- \mathscr W_N(x,y)=\sqrt{\varpi(x)\varpi(y)}\,\mathscr G(x,y)
-\end{equation}
-为核的积分算子的范数。
-\end{lemma}
-
-\begin{proof}
-在 \eqref{eq:Gram} 中代入 $s=\rho+it$ 即得 \eqref{eq:g}。对固定的 $\rho$，
-函数 $t\mapsto|X_1(\rho+it)|^2/|1+\rho+it|^2$ 是偶的非负函数，故 $g_\rho$ 是
-实值、偶的、正定的；\eqref{eq:gmass} 是 $v=0$ 处的傅里叶反演公式。
-\eqref{eq:qform} 是核 $\kappa_W$ 的二次型。
-
-对最后一个断言，令 $V:L^2([L_N,\infty))\to\mathcal H_N$ 为
-\[
- (Vf)(s)=\int_{L_N}^{\infty}\sqrt{\varpi(x)}\,f(x)\,
- \frac{X_1(s)}{1+s}e^{-sx}\dd x .
-\]
-其伴随为
-\[
- (V^*h)(x)=\sqrt{\varpi(x)}\int_{\Gamma_N}h(s)\frac{X_1(\bar s)}{1+\bar s}
- e^{-\bar s x}\,|\mathrm ds| .
-\]
-于是
-\[
- \langle VV^*h,h\rangle=\|V^*h\|^2
- =\int_{L_N}^{\infty}\varpi(x)\Bigl|\int_{\Gamma_N}h(s)\frac{X_1(\bar s)}{1+\bar s}
- e^{-\bar s x}\,|\mathrm ds|\Bigr|^2\dd x,
-\]
-即 \eqref{eq:qform}；故 $VV^*$ 就是算子 $W_N$。另一方面，$V^*V$ 的核是
-\eqref{eq:Wkernel} 的共轭；共轭核对应的算子是原算子的伴随，故范数相同。因此
-$\|W_N\|=\|VV^*\|=\|V^*V\|=\|\mathscr W_N\|$。
-\end{proof}
-
-\subsection*{6.2.\ 双边范数引理}
-
-\begin{lemma}\label{lem:twosided}
-设 $0<\alpha\le\alpha_0$，$L\ge0$，$\eta\ge0$，在 $[L,\infty)$ 上
-$\varpi(x)=x-L+\eta$，$D(x)=\sqrt{\varpi(x)}e^{-\alpha x}$。设 $g\in L^1(\mathbb R)$ 是偶的、
-正定的，且 $\int_{\mathbb R}|v||g(v)|\dd v<\infty$，$M$ 是 $L^2(\mathbb R)$ 上以
-$g$ 为核的卷积算子，故 $\|M\|=\int g$。假设
-$x\mapsto \varpi(x)e^{-2\alpha x}$ 在某个 $x^*>L$ 处取得最大值。则
-\begin{equation}\label{eq:twosided}
- \|DMD\|=\bigl(1+O(\alpha^{1/2})\bigr)\|M\|\max_{x\ge L}\bigl(\varpi(x)e^{-2\alpha x}\bigr).
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-\emph{上界。} $D$ 有界，故
-$\|DMD\|\le\|D\|_\infty^2\|M\|=\|M\|\max \varpi(x)e^{-2\alpha x}$。
-
-\emph{下界。} 置 $B=\alpha^{-1/2}$，令
-$f=B^{-1/2}\mathbf 1_{[x^*-B/2,x^*+B/2]}$，故 $\|f\|_2=1$。记
-$F(x)=\varpi(x)e^{-2\alpha x}$。由于 $F'(x^*)=0$ 且
-$F''(x^*)/F(x^*)=-1/\varpi(x^*)^2$，泰勒公式给出
-\[
- F(x)\ge F(x^*)\bigl(1-O(\alpha^2(x-x^*)^2)\bigr)\ge F(x^*)(1-O(\alpha)),
- \qquad |x-x^*|\le B/2 .
-\]
-在 $f$ 的支集上有 $D(x)^2=F(x)$。故
-\[
- \langle DMDf,f\rangle
- =\iint g(x-y)D(x)f(x)D(y)f(y)\dd x\dd y
- \ge F(x^*)(1-O(\alpha))\langle Mf,f\rangle .
-\]
-对最后一个因子，
-\[
- \begin{split}
- \langle Mf,f\rangle
- &=\frac1B\int_0^B2(B-v)g(v)\dd v
- =2\int_0^Bg(v)\dd v-\frac2B\int_0^Bvg(v)\dd v\\
- &=\|M\|+O\Bigl(\int_B^\infty|g|+\frac1B\int_0^\infty v|g|\Bigr).
- \end{split}
-\]
-由于 $g$ 可积且一阶矩有限，误差为 $O(B^{-1})=O(\alpha^{1/2})$。因此
-$\langle DMDf,f\rangle\ge(1-O(\alpha^{1/2}))\|M\|F(x^*)$。
-\end{proof}
-
-\subsection*{6.3.\ $W_N$ 的范数}
-
-\begin{proposition}\label{prop:norm}
+\begin{lemma}\label{lem:lower}
 有
-\begin{equation}\label{eq:normW}
- \|W_N\|=\Bigl(\frac{\pi}{e^3}+o(1)\Bigr)\frac1{\alpha_N}
- =\Bigl(\frac{\pi}{e^3}+o(1)\Bigr)\log N .
+\begin{equation}\label{eq:lower}
+ \|\mathscr A_N\|\ge\frac{\pi e^{-1-\alpha_N}}{2\alpha_N}
+ \cdot\frac{2}{1+\alpha_N}(1-o(1))
+ =\frac{\pi}{e\alpha_N}(1-o(1)).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+置 $B_N=\alpha_N^{-1/2}$ 与
+\[
+ J_N=\Bigl[y_D^*-\frac{B_N}2,\;y_D^*+\frac{B_N}2\Bigr],
+ \qquad f_N=B_N^{-1/2}\mathbf 1_{J_N},
+\]
+则 $\|f_N\|_2=1$。在 $J_N$ 上，
+\[
+ V_\alpha(y)=V_\alpha(y_D^*)\bigl(1-O(\alpha_N^2(y-y_D^*)^2)\bigr)
+ =V_\alpha(y_D^*)(1-O(\alpha_N)),
+\]
+因为 $\alpha_NB_N^2=1$ 且 $V_\alpha''(y_D^*)/V_\alpha(y_D^*)=-4\alpha_N^2$。
+故
+\[
+ \begin{aligned}
+ \langle\mathscr A_Nf_N,f_N\rangle
+ &=\frac1{B_N}\iint_{J_N^2}\mathscr A_N(y,u)\dd y\dd u\\
+ &\ge\pi V_\alpha(y_D^*)(1-O(\alpha_N))
+ \cdot\frac1{B_N}\iint_{J_N^2}e^{-(1+\alpha_N)|y-u|}\dd y\dd u .
+ \end{aligned}
+\]
+该二重积分等于
+\[
+ \frac2{1+\alpha_N}\Bigl(B_N-\frac{1-e^{-(1+\alpha_N)B_N}}{1+\alpha_N}\Bigr)
+ =\frac{2B_N}{1+\alpha_N}(1-o(1)),
+\]
+故商为 $\frac{2}{1+\alpha_N}(1-o(1))$，断言由 \eqref{eq:peak} 得出。
+\end{proof}
+
+\begin{proposition}\label{prop:modelnorm}
+有
+\begin{equation}\label{eq:modelnorm}
+ \|\mathscr A_N\|=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\alpha_N^{-1}.
 \end{equation}
 \end{proposition}
 
 \begin{proof}
-由 \eqref{eq:g} 与 \eqref{eq:Wkernel}，核 $\mathscr W_N$ 分成
-$\alpha_N$ 部分与 $\beta$ 部分；两个核都是正的，故
-\[
- \|W_N\|\ge\|\mathscr W_{\alpha_N}\|,\qquad
- \|W_N\|\le\|\mathscr W_{\alpha_N}\|+\|\mathscr W_\beta\| .
-\]
-
-\emph{$\alpha_N$ 线。} 这里
-$\mathscr W_{\alpha_N}(x,y)=D(x)g_{\alpha_N}(x-y)D(y)$，其中
-$D(x)=\sqrt{\varpi(x)}e^{-\alpha_Nx}$。由 \eqref{eq:grho} 与傅里叶反演公式，
-\[
- \|M_{\alpha_N}\|=2\pi\sup_t\frac{|X_1(\alpha_N+it)|^2}{|1+\alpha_N+it|^2}
- =2\pi\frac{|X_1(\alpha_N)|^2}{(1+\alpha_N)^2}(1+O(\alpha_N))=2\pi(1+O(\alpha_N)),
-\]
-其中 $M_{\alpha_N}$ 是以 $g_{\alpha_N}$ 为核的卷积。右端的最大值在 $t=0$ 处
-取得：在 $|t|\le2$ 上比值等于 $t=0$ 处的值乘以
-$1+O(\alpha_N\log(2+|t|))$，而在 $|t|>2$ 上它 $\ll t^{-2}$，当 $\alpha_N$ 充分
-小时比 $t=0$ 处的值小一个绝对因子。
-
-乘积 $x\mapsto \varpi(x)e^{-2\alpha_Nx}$ 在 \eqref{eq:peakpoint} 的 $x^*$ 处取得
-最大值，值为 \eqref{eq:peakvalue}，且对大 $N$ 有 $x^*>L_N$。取
-$\alpha=\alpha_N$、$\eta=h_N$、$g=g_{\alpha_N}$ 应用引理~\ref{lem:twosided} 得
-\[
- \|\mathscr W_{\alpha_N}\|
- =(1+O(\alpha_N^{1/2}))\,2\pi\,\frac{|X_1(\alpha_N)|^2}{(1+\alpha_N)^2}\,
- \frac{e^{-2\alpha_NL_N-1+2\alpha_Nh_N}}{2\alpha_N}.
-\]
-
-\emph{$\beta$ 线。} 类似地，
-\[
- \|\mathscr W_\beta\|\le\|M_\beta\|\max_{x\ge L_N}\varpi(x)e^{-2\beta x}\ll N^{-1/4},
-\]
-它是 $o(\alpha_N^{-1})$。
-
-\emph{结论。} 由于 $e^{-2\alpha_NL_N}=e^{-2}(1+O(\alpha_N))$、
-$e^{2\alpha_Nh_N}=1+O(\alpha_Nh_N)=1+o(1)$ 且
-$|X_1(\alpha_N)|^2=1+O(\alpha_N)$，我们得到
-\[
- \|W_N\|=(1+o(1))\,\frac{\pi}{e^3}\cdot\frac1{\alpha_N},
-\]
-即 \eqref{eq:normW}。
+结合命题~\ref{prop:schur} 与引理~\ref{lem:lower}。
 \end{proof}
 
-\subsection*{6.4.\ 迹与希尔伯特--施密特范数}
+\section{比较}\label{sec:compare}
 
-\begin{lemma}\label{lem:trace}
-有
-\begin{equation}\label{eq:trace}
- \tr W_N\ll\alpha_N^{-2},\qquad
- \|W_N\|_{\HS}\ll\alpha_N^{-3/2}.
+\subsection*{5.1.\ 三个区域}
+
+固定 $0<c<\frac14$ 与 $C>1$，置
+\begin{equation}\label{eq:regions}
+ I_-=[y_0,c/\alpha_N],\qquad I_0=[c/\alpha_N,C/\alpha_N],\qquad
+ I_+=[C/\alpha_N,\infty),
+\end{equation}
+其中 $y_0$ 如 \eqref{eq:y0}。设 $P_-,P_0,P_+$ 是 $L^2([y_0,\infty))$ 到这些
+区间的正交投影。我们将逐块比较 $\mathcal D_N$ 与 $\mathscr A_N$。
+
+\subsection*{5.2.\ 行估计}
+
+\begin{lemma}\label{lem:row}
+对 $y\ge y_0$，
+\begin{equation}\label{eq:WNbound}
+ W_N(y)\ll e^{2y}(1+y),
+\end{equation}
+且
+\begin{equation}\label{eq:Dbound}
+ \mathscr D_N(y,u)\ll(1+\min(y,u))e^{-2\alpha_N\min(y,u)}
+ e^{-(1+\alpha_N)|y-u|}.
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-由 \eqref{eq:tracepole} 与 \eqref{eq:phibound}，
+对第一个界，用 $q\le e^y$、当 $n\le x$ 时 $\Lambda(n)^2\le(\log x)\Lambda(n)$
+以及 $\sum_{n\le x}\Lambda(n)\ll x$：
 \[
- \tr W_N=\int_{L_N}^{\infty}\varpi(x)\int_{\Gamma_N}\frac{|X_1(s)|^2}{|1+s|^2}
- e^{-2x\Re s}|\mathrm ds|\,\mathrm dx\ll\int_{L_N}^{\infty}\varpi(x)e^{-2\alpha_Nx}\dd x
- \ll\alpha_N^{-2}.
+ W_N(y)\le e^y\sum_{n\le e^y}\Lambda(n)^2
+ \ll e^y\cdot e^y\cdot(1+y)=e^{2y}(1+y).
 \]
-由于 $W_N\ge0$，
-$\|W_N\|_{\HS}^2=\tr(W_N^2)\le\|W_N\|\tr W_N\ll\alpha_N^{-3}$。
+对第二个界，把 \eqref{eq:WNbound} 与
+$\sqrt{m(y)m(u)}\le2e^{-(1+\alpha_N)(y+u)}$ 结合，并用
+$2\min-(1+\alpha_N)(y+u)=-2\alpha_N\min-(1+\alpha_N)|y-u|$。
 \end{proof}
 
-\section{最小特征值}\label{sec:main}
-
-\subsection*{7.1.\ 外尔不等式}
-
-\begin{lemma}\label{lem:weyl}
-设 $A$ 是希尔伯特空间上自伴紧算子，$B$ 是自伴希尔伯特--施密特算子。则
-\[
- \bigl|\lambda_{\min}(A+B)-\lambda_{\min}(A)\bigr|\le\|B\|_{\HS}.
-\]
+\begin{lemma}\label{lem:rows}
+对 $y\ge y_0$，
+\begin{equation}\label{eq:rowD}
+ \int_{y_0}^{\infty}\mathscr D_N(y,u)\dd u\ll R_\alpha(y),
+ \qquad
+ \int_{y_0}^{\infty}\mathscr A_N(y,u)\dd u\ll R_\alpha(y),
+\end{equation}
+其中 $R_\alpha(y)=(1+y)e^{-2\alpha_Ny}$。
 \end{lemma}
 
 \begin{proof}
-这是极小极大原理连同 $\|f\|=1$ 时的
-$|\langle Bf,f\rangle|\le\|B\|_{\HS}$。
+对 $\mathscr D_N$，把 \eqref{eq:Dbound} 分别对 $u\le y$ 与 $u\ge y$ 积分：
+\[
+ \int_{y_0}^{y}\mathscr D_N\dd u\ll R_\alpha(y)\int_{y_0}^{y}
+ e^{-(1-\alpha_N)(y-u)}\dd u\ll\frac{R_\alpha(y)}{1-\alpha_N},
+\]
+\[
+ \int_{y}^{\infty}\mathscr D_N\dd u\ll R_\alpha(y)
+ \int_0^{\infty}e^{-(1+\alpha_N)v}\dd v\ll\frac{R_\alpha(y)}{1+\alpha_N}.
+\]
+对 $\mathscr A_N$，同样的计算以 $V_\alpha\le R_\alpha$ 与比值界 \eqref{eq:ratio}
+成立。
 \end{proof}
 
-\subsection*{7.2.\ 定理~\ref{thm:main} 的证明}
+\subsection*{5.3.\ 边缘块}
 
-我们对 $A=-W_N$、$B=R_N$ 应用引理~\ref{lem:weyl}。由于 $W_N\ge0$ 是紧的
-迹类算子，$\lambda_{\min}(-W_N)=-\|W_N\|$。由命题~\ref{prop:HS}，
-$\|R_N\|_{\HS}\ll(\log\log(3N))^2$。故
-\[
- \lambda_{\min}(\mathcal K_N)=-\|W_N\|+O\bigl((\log\log N)^2\bigr),
-\]
-而命题~\ref{prop:norm} 给出 (iv)。对算子范数，我们用
-\[
- \bigl|\,\|\mathcal K_N\|-\|W_N\|\,\bigr|\le\|R_N\|\le\|R_N\|_{\HS},
-\]
-故 $\|\mathcal K_N\|=(\pi/e^3+o(1))\log N$。最后，
-\[
- \|\mathcal K_N\|_{\HS}\le\|W_N\|_{\HS}+\|R_N\|_{\HS}
- \ll\alpha_N^{-3/2}+(\log\log(3N))^2\ll(\log N)^{3/2},
-\]
-即 (v)。证毕。
+\begin{lemma}\label{lem:edge}
+有
+\begin{equation}\label{eq:low}
+ \|P_-\mathcal D_NP_-\|+\|P_-\mathscr A_NP_-\|\ll1+c/\alpha_N,
+\end{equation}
+且
+\begin{equation}\label{eq:high}
+ \|P_+\mathcal D_NP_+\|+\|P_+\mathscr A_NP_+\|\ll Ce^{-2C}/\alpha_N .
+\end{equation}
+\end{lemma}
 
-\subsection*{7.3.\ 注}
+\begin{proof}
+对低区，注意当 $y\le c/\alpha_N$ 时 $R_\alpha(y)\le1+y\le1+c/\alpha_N$；
+用行界 \eqref{eq:rowD} 作 Schur 检验即得 \eqref{eq:low}。对高区，$R_\alpha$ 在
+$y\ge C/\alpha_N$ 上递减（因为当 $2\alpha_N(1+y)>1$ 时
+$R_\alpha'(y)=e^{-2\alpha_Ny}[1-2\alpha_N(1+y)]<0$，而 $C>1/2$ 保证了这一点），故
+\[
+ \sup_{y\ge C/\alpha_N}R_\alpha(y)=R_\alpha(C/\alpha_N)
+ \le\Bigl(1+\frac C{\alpha_N}\Bigr)e^{-2C}\ll\frac{Ce^{-2C}}{\alpha_N},
+\]
+再由 Schur 检验得 \eqref{eq:high}。
+\end{proof}
 
-\begin{remark}\label{rem:half}
-定理~\ref{thm:main}(v) 中的指数 $3/2$ 来自
-$\|W_N\|_{\HS}^2\le\|W_N\|\tr W_N$，其中
-$\|W_N\|\ll\alpha_N^{-1}$、$\tr W_N\ll\alpha_N^{-2}$；它未必最优。
+\subsection*{5.4.\ 中心块}
+
+\begin{lemma}\label{lem:center}
+对固定的 $c,C$，
+\begin{equation}\label{eq:center}
+ \|P_0(\mathcal D_N-\mathscr A_N)P_0\|\le\epsilon_N(c,C)\|P_0\mathscr A_NP_0\|
+ =o(\alpha_N^{-1}),
+\end{equation}
+其中 $\epsilon_N(c,C)\to0$。
+\end{lemma}
+
+\begin{proof}
+由引理~\ref{lem:close}，在 $I_0\times I_0$ 上
+\[
+ |\mathscr D_N-\mathscr A_N|\le\epsilon_N(c,C)\mathscr A_N .
+\]
+由于 $\mathscr A_N$ 在 $I_0$ 上 $\ge0$（见下文引理~\ref{lem:positive}），核受控
+给出算子不等式
+$\|P_0(\mathcal D_N-\mathscr A_N)P_0\|\le\epsilon_N\|P_0\mathscr A_NP_0\|$。
+最后，由 \eqref{eq:rowD} 有 $\|P_0\mathscr A_NP_0\|\ll\alpha_N^{-1}$。
+\end{proof}
+
+\subsection*{5.5.\ 模型的正性}
+
+\begin{lemma}\label{lem:positive}
+核 $\mathscr A_N$ 在 $[y_0,\infty)^2$ 上半正定。
+\end{lemma}
+
+\begin{proof}
+写
+\[
+ \mathscr A_N(y,u)=\pi e^{-(1+\alpha_N)(y+u)}U(\min(y,u)),
+ \qquad U(y)=\Bigl(y-\frac12\Bigr)e^{2y}.
+\]
+由于 $y_0>\frac12$，有 $U(y_0)>0$，且当 $y\ge y_0$ 时 $U'(y)=2ye^{2y}>0$。故
+\[
+ U(\min(y,u))=U(y_0)+\int_{y_0}^{\infty}U'(v)\mathbf 1_{y\ge v}\mathbf 1_{u\ge v}\dd v .
+\]
+第一项给出秩一核 $U(y_0)e^{-(1+\alpha_N)(y+u)}$，第二项给出秩一核
+$e^{-(1+\alpha_N)(y+u)}\mathbf 1_{y\ge v}\mathbf 1_{u\ge v}$ 的非负组合。故
+$\mathscr A_N$ 是正核。
+\end{proof}
+
+\subsection*{5.6.\ 交叉块}
+
+\begin{lemma}\label{lem:cross}
+设 $T\ge0$ 是希尔伯特空间上的有界算子，$P,Q$ 为正交投影。则
+\begin{equation}\label{eq:cross}
+ \|PTQ\|^2\le\|PTP\|\,\|QTQ\| .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+写 $PTQ=(P T^{1/2})(T^{1/2}Q)$，用 $\|AB\|\le\|A\|\|B\|$ 以及
+$\|PT^{1/2}\|^2=\|PTP\|$、$\|T^{1/2}Q\|^2=\|QTQ\|$。
+\end{proof}
+
+\subsection*{5.7.\ 比较}
+
+\begin{proposition}\label{prop:compare}
+对固定的 $c,C$，
+\begin{equation}\label{eq:compare}
+ \limsup_{N\to\infty}\alpha_N\|\mathcal D_N-\mathscr A_N\|
+ \ll c+\sqrt c+Ce^{-2C}+\sqrt{Ce^{-2C}}+\sqrt{cCe^{-2C}} .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由引理~\ref{lem:positive}，$\mathscr A_N\ge0$；由引理~\ref{lem:kernel}，
+$\mathcal D_N\ge0$。对 $T=\mathcal D_N$ 与 $T=\mathscr A_N$，引理~\ref{lem:cross}
+与对角估计 \eqref{eq:low}--\eqref{eq:center} 给出，对 $i\ne j$，
+\[
+ \|P_iTP_j\|\ll\frac{\sqrt{c}}{\alpha_N},\quad
+ \|P_0TP_+\|\ll\frac{\sqrt{Ce^{-2C}}}{\alpha_N},\quad
+ \|P_-TP_+\|\ll\frac{\sqrt{cCe^{-2C}}}{\alpha_N} .
+\]
+$\mathcal D_N-\mathscr A_N$ 的九个块被 $\mathcal D_N$ 与 $\mathscr A_N$ 的对应块
+之和控制（三角不等式），故
+\[
+ \alpha_N\|\mathcal D_N-\mathscr A_N\|
+ \ll c+\sqrt c+Ce^{-2C}+\sqrt{Ce^{-2C}}+\sqrt{cCe^{-2C}}+\epsilon_N(c,C).
+\]
+对 $N$ 取 $\limsup$ 并用 $\epsilon_N(c,C)\to0$ 即得 \eqref{eq:compare}。
+\end{proof}
+
+\section{主定理的证明}\label{sec:proof}
+
+\begin{proof}[定理~\ref{thm:main} 的证明]
+取 $0<c<\frac14$、$C>1$。由命题~\ref{prop:compare}，
+\[
+ \limsup_{N\to\infty}\alpha_N\|\mathcal D_N-\mathscr A_N\|\ll\delta(c,C),
+\]
+其中 $\delta(c,C)=c+\sqrt c+Ce^{-2C}+\sqrt{Ce^{-2C}}+\sqrt{cCe^{-2C}}$。
+由于当 $c\downarrow0$、$C\uparrow\infty$ 时 $\delta(c,C)\to0$，我们得到
+\[
+ \alpha_N\|\mathcal D_N-\mathscr A_N\|\longrightarrow0 .
+\]
+由命题~\ref{prop:modelnorm}，
+$\|\mathscr A_N\|=(\pi/e+o(1))\alpha_N^{-1}$，因此
+\[
+ \|\mathcal D_N\|=\|\mathscr A_N\|+O\bigl(\|\mathcal D_N-\mathscr A_N\|\bigr)
+ =\Bigl(\frac{\pi}{e}+o(1)\Bigr)\alpha_N^{-1}
+ =\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N .
+\]
+\end{proof}
+
+\begin{proof}[推论~\ref{cor:HS} 的证明]
+由于 $\mathcal D_N\ge0$ 且 $\operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}$，
+\[
+ \|\mathcal D_N\|_{\HS}^2=\operatorname{tr}(\mathcal D_N^2)
+ \le\|\mathcal D_N\|\operatorname{tr}\mathcal D_N
+ \ll\alpha_N^{-1}\cdot\alpha_N^{-2}=\alpha_N^{-3},
+\]
+故 $\|\mathcal D_N\|_{\HS}\ll\alpha_N^{-3/2}=(\log N)^{3/2}$。
+\end{proof}
+
+\section{注}\label{sec:remarks}
+
+\begin{remark}\label{rem:constant}
+常数 $\pi/e$ 有明确的来源。$\mathscr D_N$ 在对角线上的局部极限是以
+$e^{-(1+\alpha_N)|y-u|}$ 为核的卷积，其符号
+$2(1+\alpha_N)/((1+\alpha_N)^2+t^2)$ 在 $t=0$ 处取最大值 $2/(1+\alpha_N)$；
+乘子 $\pi$ 来自权重，指数 $e^{-1-\alpha_N}/(2\alpha_N)$ 来自峰值 $y_D^*$。
+乘积 $2\pi\cdot\frac12\cdot e^{-1}$ 即 $\pi/e$。
 \end{remark}
 
-\begin{remark}\label{rem:noGRH}
-证明只用到 $\mathscr A_N$ 在条带 $\operatorname{Re}w\ge2\alpha_N>0$ 上的解析
-性质、$1/\zeta$ 的欧拉乘积以及斯特林公式。特别地，定理~\ref{thm:main} 是
-无条件的；假设 $\mathrm{GRH}(N)$ 只通过分解 \eqref{eq:split} 与特征分量
-$\mathcal P_N$ 进入 \cite{LL} 的哥德巴赫论证。
+\begin{remark}\label{rem:vsLL}
+论文 \cite[命题 6.5]{LL} 只用到
+$\|\mathcal D_N\|_{\HS}\le\operatorname{tr}\mathcal D_N\ll(\log N)^2$。
+定理~\ref{thm:main} 给出带精确常数的算子范数，推论~\ref{cor:HS} 把
+希尔伯特--施密特界改进到 $(\log N)^{3/2}$。
 \end{remark}
 
-\begin{remark}\label{rem:kernel-form}
-\eqref{eq:Phi} 的核 $\Phi_x$ 是 \cite{LL} 的标准边界因子乘以指数
-$e^{-x(s+\bar z)}$；引理~\ref{lem:laplace} 的拉普拉斯恒等式是唯一用到这个指数
-的地方。特别地，算子 $W_N$ 由它的核 $\kappa_W$ 确定，所有估计都是核的估计。
+\begin{remark}\label{rem:limitation}
+论证只用到素数定理；引理~\ref{lem:pnt} 的误差项除一致性外并不需要。特别地，
+结论是无条件的。它只涉及 $\mathcal D_N$ 自身的范数，不使用、也不声称关于
+\eqref{eq:split} 中完整算子 $T_N$ 的谱的任何信息。
 \end{remark}
 
 \begin{thebibliography}{9}
