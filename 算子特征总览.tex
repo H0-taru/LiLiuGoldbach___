@@ -1,0 +1,668 @@
+\documentclass[11pt,a4paper]{ctexart}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\setlist{itemsep=2pt,topsep=3pt,parsep=1pt}
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\pole}{\mathrm{pole}}
+\newcommand{\Dk}{\mathcal{D}}
+\newcommand{\Ak}{\mathcal{A}}
+\newcommand{\al}{\alpha_{N}}
+\newcommand{\be}{\beta}
+\newcommand{\LN}{L_{N}}
+\newcommand{\OK}{\textcolor{green!45!black}{\textbf{[可确认]}}}
+\newcommand{\COND}{\textcolor{orange!85!black}{\textbf{[条件性]}}}
+\newcommand{\OPEN}{\textcolor{red!70!black}{\textbf{[待证]}}}
+\newcommand{\BLOCK}{\textcolor{purple!80!black}{\textbf{[受限]}}}
+
+\title{\bfseries Li--Liu 算子谱研究\\[2pt]
+\large 21 份进度记录的结论汇览、各方向终点，\\[2pt]
+以及关于 $D_N$ 主特征值证明的全部意见汇总与回应}
+\author{}
+\date{2026 年 11 月 22 日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+本文汇总 \texttt{算子特征进度汇总} 目录下 21 份进度记录（按文件名顺序：
+\texttt{各算子特征进度.md}、\texttt{各算子特征进度2.md}、$\ldots$、\texttt{各算子特征进度21.md}）。
+第 \ref{sec:per-file} 节逐份记录其主要结论；第 \ref{sec:endpoints} 节把散落在多份记录中的同一条探索线
+（$D_N$、$K_N$、$P_N$、$T_N$、算子间恒等式与算术输入）各自收束为一个"终点"；
+第 \ref{sec:opinions} 节把全部针对 $D_N$ 主特征值证明的意见集中列出并逐条回应；
+第 \ref{sec:lean} 节给出 Lean 4 形式化的现状与可复核清单。
+\end{abstract}
+
+\tableofcontents
+\bigskip
+
+%=====================================================================
+\section{记号与四个算子的分工}\label{sec:setup}
+
+沿用原论文（Li--Liu，下称"主论文"）与各进度记录的记号：
+\[
+\al=\frac{1}{\log N},\qquad \be=\frac{1}{2}-\frac{\al}{2},\qquad
+\LN=\log\frac{N}{\pi},\qquad
+a(s)=\frac{X_1(s)}{1+s},\qquad \varphi_{-x}(s)=a(s)e^{-sx}.
+\]
+四个算子：
+\begin{itemize}
+\item $D_N$：对角算子的正秩一分解 $D_N=\sum_{(n,N)=1}\frac{\Lambda(n)^2}{n}d_n\otimes d_n$（"算术尺度"）；
+\item $P_N$：奇特征相关算子，$P_N=\frac{2}{\varphi(N)}\sum_{\chi\in X_N^-}u_\chi\otimes u_\chi\ge0$；
+\item $K_N$：Beta 模型（连续 Mellin 尺度），$K_N=\mathfrak S(N)(\pi/N)^{s+z}\mathfrak P_N(s+z)\zeta(1-s-z)X_1(s)X_1(z)$；
+\item $T_N=P_N-D_N-K_N$：残差。
+\end{itemize}
+全局恒等式（贯穿全部 21 份记录）：
+\begin{equation}\label{eq:main-split}
+\boxed{\;K_N=-W_N+R_N,\qquad P_N=D_N-W_N+R_N+T_N,\qquad W_N:=-K_N^{\pole}\ge0.\;}
+\end{equation}
+
+%=====================================================================
+\section{各份进度记录的主要结论（按文件名顺序）}\label{sec:per-file}
+
+\begin{longtable}{@{}p{1.05cm}p{13.6cm}@{}}
+\toprule
+序号 & 主要结论 \\
+\midrule
+\endhead
+1 &
+精确：$H_N(0)=1$，$H_N'(0)=h_N=\log2+\sum_{p\mid N,\,p>2}\frac{\log p}{p-1}\ll\log\log(3N)$；
+$K_N^{\pole}=-\int_{\LN}^{\infty}(x-\LN+h_N)\varphi_{-x}\otimes\varphi_{-x}\,dx\le0$（精确负半定框架）；
+$g_0(v)=\pi e^{-|v|}$；$\|K_N^{\pole}\|\sim\frac{\pi}{e^3}\al^{-1}$；
+$D_N$ 可转成 Sturm--Liouville 型问题，猜想 $\lambda_k(D_N)=\frac{\pi}{e\al}-\frac{\pi}{e}[1+(2k+1)\sqrt2]+o(1)$；
+给出余项目标 $\|R_N\|_{\HS}\ll(\log\log N)^C$ 与可信度分级表。\\
+2 &
+把余项幂次\textbf{由 $(\log\log N)^2$ 修正为 $(\log\log N)^4$}（因 $H_N$ 统一界本身贡献 $(\log\log N)^2$）；
+$D_N$ 光滑核 $\Ak_N(y,u)=\pi(\min(y,u)-\tfrac12)e^{-2\al\min(y,u)}e^{-(1+\al)|y-u|}$，
+比较 $\al\|\Dk_N-\Ak_N\|\to0$，得 $\|D_N\|\sim\frac{\pi}{e}\al^{-1}=\frac{\pi}{e}\log N$；
+新发现：Mellin 模式疑可指数精度落入算术子空间（$(\mathrm{M\text{-}D})$、$(\mathrm{M\text{-}align})$）。\\
+3 &
+把前两项写成可逐块检核的证明框架（三区域 Schur 分解）；
+给出"结论分级表"（哪些依赖 GRH）；
+明确下一步只做两件事：$(K4)$ 余项 HS 定理与 $(D5)$ 三区域算子比较定理。\\
+4 &
+在\textbf{同一算术正交基}下写出三算子的显式矩阵，Rayleigh 商 $=$「模 $N$ 的素数幂相关 $+$ Beta 连续 Gram」；
+真正的算术困难被定位为同余关系 $q_\ell\equiv\pm q_m\pmod N$（$k\le N^{1/2+o(1)}$）；
+补证 $\operatorname{Ran}P_N\subset\mathcal D_N$（GRH 下），得
+$\|T_N-\iota_DA_N\Pi_D\|\ll(\log\log(3N))^4$。\\
+5 &
+判定：$D_N$ 的领先范数 $\frac{\pi}{e}\log N$ \OK（不需 GRH）；
+$W_N$ 领先范数已有局部证明框架；
+指出\textbf{现有 GRH 引理（主论文 Lemma 6.4）经 Fourier--Cauchy 只能给出 $\al^{-2}$，比所需的 $\al^{-1}$ 差一个 $\log N$}；
+于是瓶颈被明确为固定模 $N$、带高斯权的正负号区分的素数对相关。\\
+6 &
+发现与 Liu（Travor Zihao Liu）论文的直接联系：$P_N$ 的两个正号素数相关项可由其方差理论处理，
+而 $K_N$（Beta 模型）正是给"两正一负"配的连续模型；问题被转回
+$n-m=kN$（差型）与 $n+m=kN$（Goldbach 型）两族素数相关。\\
+7 &
+指出不能照搬 Liu 的 Hooley 方差定理，\textbf{须先作奇特征投影}；
+建立三族局部方差公式
+$P_N\approx X\min(\log X,\log N)\int W^2$，$D_N\approx X\log X\int W^2$，
+$W_N\approx X(\log X-\log N)_+\int W^2$，
+三者主项恰好给出 $P_N\approx D_N-W_N$。\\
+8 &
+推出适用于奇特征的 Pair Correlation--Variance 公式并证明 $\alpha<1$ 时的 ramp 主项；
+把突破口收缩为一个\textbf{反号协方差}
+$\sum_a(A(a)-\mu)\overline{(A(-a)-\mu)}=o(X\log q)$，并给出三种等价语言。\\
+9 &
+在 Bhowmik--Halupczok--Matsumoto--Suzuki 的证明中找到\textbf{恰好出现的奇偶性加权特征和}；
+判定核心障碍是 $C_q^{\mathrm{anti}}(X)$ 及其双线性版本；
+对 $N=2q$（$q$ 奇素数）情形可直达。\\
+10 &
+两份材料分处两个层次；把目标拆成
+(i) $\|P_N\|\sim\frac{\pi}{e}\log N$ 与
+(ii) $\|P_N-D_N-K_N\|\le\sqrt{\mathfrak S(N)(\log N)^3/N}$；
+给出推进次序：Gram 矩阵 $\to$ $D_N/W_N$ 谱重叠 $\to$ 局部波包双线性 $\to$ Bhowmik $c=0$ $\to$ 零点 pair correlation。\\
+11 &
+审读主论文：未发现极点展开、Euler 乘积、余项 HS 估计的致命错误；\textbf{但 §6.2「双边范数引理」下界证明中有一处不合法的积分比较}，
+它直接承担 $\|W_N\|\sim\frac{\pi}{e^3}\log N$ 的下界（判定可用算子范数估计修补）；
+并指出新证明的 $\|R_N\|=O((\log\log N)^2)$ 远大于 $\delta_N=\sqrt{\mathfrak S(N)(\log N)^3/N}$，故 $R_N$ 不可忽略。\\
+12 &
+对 DeepSeek 意见逐条回应：\S1--\S4 赞同（Euler 局部因子、$\gamma_1$ 符号、$W_N$ 正性与 Laplace 表示、余项二重积分收敛）；
+\textbf{§5 修补正确但还需补一项一般性假设}；
+\textbf{§6.3 右边界应补 $(1+h_N)$ 因子}：$\|\mathcal W_{\be}\|\ll N^{-1/4}\log\log(3N)$（仍是 $o(1/\al)$）；
+并声明：对 DeepSeek 报称的 Lean 形式化进度\textbf{未取得源码，故不作独立复核}。\\
+13 &
+给出 $K_N$ 主特征方向的\textbf{显式 Hermite/高斯波包族}（经 $V$ 映射回 Hardy 空间）；
+构造 $P_N$ 低尺度 Riesz 波包，得 $\|P_N\|\ge(\frac{\pi}{e}+o(1))\log N$；
+指出 $D_N$ 与 $W_N$ 有\textbf{不同中心、相同简谐振子轮廓}。\\
+14 &
+对仓库当前 \texttt{main.tex}（679 行，题《条件哥德巴赫方法中对角算子的谱范数》）作数学审计：
+\textbf{主证明链未发现不可弥补错误}，$\|\mathcal D_N\|=(\frac{\pi}{e}+o(1))\log N$ 看起来成立；
+\textbf{给出 8 条修改建议（详见第 \ref{sec:opinions} 节）}，其中 Remark \texttt{eigenvector} 涉及真实证明缺口。\\
+15 &
+$D_N$ 的 Hermite 近似特征函数可提升到 $o(1)$ 级近似本征方程；
+低尺度压缩给出更精细的 $P_N$ 谱下界；
+\textbf{指出前一轮 Hardy 波包公式多了一个 $e^{-y}$ 因子（不正确），并给出修正公式}；
+算出 $D_N$ 在 $K_N$ 主波包上的作用约为 $3\|W_N\|$。\\
+16 &
+$D_N$ 主谱可描述到\textbf{常数阶}；$P_N$ 低尺度谱下界
+$\frac{\pi}{e}\log N-\frac{\pi}{e}(2+\sqrt2)+o(1)$；
+$D_N$--$K_N$ 主波包重叠有 $N^{-\sqrt2/4+o(1)}$ 衰减路线。\\
+17 &
+回答"非负特征值"问题：判断完全正确；
+得到 $D_N$ 的\textbf{完整谱分布}（不只是前几个特征值）：宽度约 $\log N$ 的高谱带，
+顶端由简谐振子描述、中段由相空间 Weyl 定律描述、远端衰减到零；
+\textbf{撤回}上一轮对 $P_N$ 低高块的过早主项判断。\\
+18 &
+$P_N$ 现状：已知 $\lambda_{\max}(P_N)\ge(\frac{\pi}{e}+o(1))\log N$，且低尺度谱与 $D_N$ 相同；
+\textbf{无条件上界与主特征函数形状均未解决}；
+把总抵消拆为三个要求：低尺度主峰、边界层秩一交叉、高尺度补偿。\\
+19 &
+引入 $\rho_N:=\|T_N\|$ 作参数，分"小残差/非小残差"两支；
+\textbf{加强加权 PNT}：$y\ge Y_N=A(\log\log N)^2$ 时
+$\Dk_N=\Ak_N(1+o(\al^M))$，$M$ 任意固定；
+$K_N$ 低高混合块\textbf{无条件} $\|Q_-K_NQ_+\|\ll(\log\log(3N))^2$；
+$Q_-D_NQ_+=c_Ne_-\otimes e_+$，$c_N=(\frac{\pi}{2e^2}+o(1))\log N$；
+给出两个双向残差诊断下界；\textbf{强调 $Q_-T_NQ_-=0$ 并不意味着 $T_N$ 小}；
+\textbf{提出 $D_N$ 稿件 Remark \texttt{eigenvector} 的修改建议}。\\
+20 &
+把 $P_N$ 的低--高边界交叉矩阵元\textbf{精确转成 Mellin 权函数的特征相关}：
+$\Phi_-(u)\sim C u\log\frac{1}{2u}$、$\Phi_+(u)\sim C'u^{-1-2\al}$，
+得精确恒等式与\textbf{反推权函数}的构造（$V_\pm$、$\Phi_\pm$）；
+\textbf{修正}前一轮直接把 Dirichlet 级数搬到左边界的收敛性问题（改用 Mellin--Riesz 表示）；
+发现 $K_N$ 余项在 $w=0$ 附近有 $1/h_N$ 的\textbf{非平凡频率缩放}。\\
+21 &
+核查一篇新预印本（2026-11-21，v1，题为 \emph{Failure of the Li--Liu spectral hypothesis R under Dirichlet GRH}）：
+在主论文第 7 节框架内重推其测试向量，\textbf{独立核验了核心恒等式}
+$\langle T_Nv_g,v_f\rangle=-\frac1N\sum_{m<N,(m,N)=1}\Lambda(m)b(m)\bigl(\Lambda(N-m)-\Lambda(N+m)\bigr)$，
+并核实 $D_N,K_N$ 在该测试向量上\textbf{矩阵元严格为零}；
+判定：该反例打击的是 $R$ 级全局范数上界，\textbf{不推翻} $S$，也不推翻平衡 Goldbach 标量；
+并证明该异常与主论文的平衡测试向量 $v_\phi$ \textbf{严格解耦}（两个交叉矩阵元精确为零）；
+进一步推出这些 $N$ 的 $T_N$ \textbf{必同时有正、负谱}。\\
+\bottomrule
+\end{longtable}
+
+%=====================================================================
+\section{各方向探索的终点}\label{sec:endpoints}
+
+把 21 份记录中反复出现的五条探索线各自收束。每条给出：起点问题 $\to$ 已确立的事实 $\to$
+已闭合（或基本闭合）的证明路线 $\to$ 未解决部分 $\to$ 终点判定。
+
+\subsection{方向 I：$K_N$（Beta 模型 / 负谱）}
+
+\textbf{已确立（精确，不需要 GRH）}
+\begin{align}
+H_N(0)&=1,\qquad H_N'(0)=h_N=\log 2+\sum_{p\mid N,\ p>2}\frac{\log p}{p-1}\ll\log\log(3N),\label{eq:hN}\\
+H_N(w)\zeta(1+w)\zeta(1-w)&=-\frac{1}{w^2}-\frac{h_N}{w}+O\bigl((\log\log N)^4\bigr),\\
+K_N^{\pole}&=-\int_{\LN}^{\infty}(x-\LN+h_N)\,\varphi_{-x}\otimes\varphi_{-x}\,dx\ \le 0,\label{eq:pole}\\
+A_{\al}&=\int_{\mathbb R}|a(\al+it)|^2dt\longrightarrow\pi,\qquad g_0(v)=\pi e^{-|v|}.\label{eq:Aalpha}
+\end{align}
+
+\textbf{证明路线（骨架闭合）}
+两段估计：原点附近用 Taylor（$|\mathcal R_N(w)|\ll(\log\log N)^4$）；
+远离原点用 Euler 乘积 $H_N(w)\ll(\log\log N)^2$ + $\zeta$ 凸性界 + $a(\rho+it)\ll(1+|t|)^{-1}$，
+得
+\begin{equation}\label{eq:Krem}
+\|R_N\|_{\HS}\ll(\log\log(3N))^4 .
+\end{equation}
+
+\textbf{由此推出的领先谱}
+由 \eqref{eq:pole} 与 \eqref{eq:Aalpha}、及中心 $x_{K,*}=\LN+\frac{1}{2\al}-h_N$：
+\begin{equation}\label{eq:Kspec}
+\|W_N\|=\|K_N^{\pole}\|\sim\frac{\pi}{e^3\al}=\frac{\pi}{e^3}\log N,
+\qquad
+\lambda_{\min}(K_N)=-\frac{\pi}{e^3}\log N+o(\log N).
+\end{equation}
+统计量：$\operatorname{tr}W_N\sim\frac{\pi}{4e^2\al^2}$，
+$\|W_N\|_{\HS}^2\sim\frac{\pi^2}{32e^4\al^3}$，故有效谱秩 $\sim 2/\al$（\textbf{不是近似秩一}）。
+
+\textbf{终点}
+
+\COND\ $-\frac{\pi}{e^3}\log N$ 这一常数\textbf{可确认}，条件是 \eqref{eq:Krem} 定稿；
+\OPEN\ 负谱的固定序号高斯型渐近（$\lambda_{-,k}\sim-\frac{\pi}{e^3}\log N$ 及间隔 $2\sqrt2\frac{\pi}{e^3}$）仍为猜想。
+
+\subsection{方向 II：$D_N$（算术尺度 / 对角算子）}
+
+\textbf{已确立}
+精确核（Fourier--Laplace 等距）
+\begin{equation}\label{eq:Dkernel}
+\Dk_N(y,u)=2\pi W_N(\min(y,u))\sqrt{m(y)m(u)},\quad
+W_N(y)=\sum_{q\le e^y,\ (q,N)=1}q\Lambda(q)^2,\quad
+m(y)=e^{-2(1+\al)y}+e^{-2(1+\be)y}.
+\end{equation}
+加权 PNT（保留 $-1/2$ 次主项，这是 $\pi/e$ 常数的来源）
+\begin{equation}\label{eq:PNT}
+W_N(y)=\tfrac12e^{2y}\bigl(y-\tfrac12\bigr)(1+o(1)),
+\qquad\text{加强版：}\quad
+W_N(y)=\tfrac12e^{2y}\bigl(y-\tfrac12\bigr)\bigl(1+o(\al^M)\bigr)\ \ (y\ge A(\log\log N)^2).
+\end{equation}
+光滑核与三区域比较
+\begin{equation}\label{eq:Asmooth}
+\Ak_N(y,u)=\pi\bigl(\min(y,u)-\tfrac12\bigr)e^{-2\al\min(y,u)}e^{-(1+\al)|y-u|},
+\qquad \al\|\Dk_N-\Ak_N\|\longrightarrow0 .
+\end{equation}
+
+\textbf{领先范数（不需要 GRH）}
+\begin{equation}\label{eq:Dnorm}
+\boxed{\ \|D_N\|\sim\frac{\pi}{e\al}=\frac{\pi}{e}\log N\ }
+\end{equation}
+（比主论文用 GRH + 正性得到的 $\|D_N\|\ll\al^{-2}$ 精细一个对数因子。）
+
+\textbf{常数阶谱}
+主势 $V_{\al}(y)=(y-\frac12)e^{-2\al y}$ 的唯一峰在 $y_*=\frac12+\frac{1}{2\al}$；
+缩放 $X=\sqrt{\al}(y-y_*)$ 下有效算子
+\begin{equation}
+\mathcal L_D=\frac{d^2}{dX^2}-2X^2-2
+\quad\Longrightarrow\quad
+\lambda_j(D_N)=\frac{\pi}{e}\log N-\frac{\pi}{e}\bigl(2+(2j+1)\sqrt2\bigr)+o(1),\label{eq:Dspec}
+\end{equation}
+谱隙 $\lambda_0-\lambda_1\to\frac{2\sqrt2\pi}{e}$；
+进一步得到\textbf{完整谱分布}：宽度约 $\log N$ 的高谱带，顶端由简谐振子描述、中段由
+相空间 Weyl 计数描述、远端衰减到零。
+
+\textbf{终点}
+
+\OK\ 领先范数 \eqref{eq:Dnorm}；
+\COND\ 常数阶谱 \eqref{eq:Dspec}（Mosco 收敛的三要素——位置势极限、动能极限、紧性——均已写出，
+剩下是把变系数非局部动能的截断比较整理成完整的 Mosco 下半连续性证明）；
+\OK\ 完整谱分布的 Weyl 部分。
+
+\subsection{方向 III：$P_N$（奇特征相关算子）}
+
+\textbf{已确立（GRH 下）}
+\begin{equation}\label{eq:Pnd}
+P_N=UU^*\ge0,\qquad \operatorname{rank}P_N\le\tfrac{\varphi(N)}{2},\qquad
+\operatorname{tr}P_N\ll(\log N)^2,\qquad
+\operatorname{Ran}P_N\subset\mathcal D_N .
+\end{equation}
+低尺度压缩（精确矩阵恒等式的直接推论）：在
+$\mathcal L_N=\overline{\operatorname{span}}\{e_j:q_{j+1}\le N^{3/4}\}$ 上
+$\Pi_{\mathcal L_N}P_N\Pi_{\mathcal L_N}=\Pi_{\mathcal L_N}D_N\Pi_{\mathcal L_N}$，
+从而
+\begin{equation}\label{eq:Pnlow}
+\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N\ \le\ \lambda_{\max}(P_N)\ \ll(\log N)^2 .
+\end{equation}
+
+\textbf{条件性主谱}（关键结构结果）：记 $\rho_N=\|T_N\|$，则由 \eqref{eq:main-split}
+\begin{equation}\label{eq:Pncond}
+\rho_N=o(\log N)\ \Longrightarrow\
+\lambda_{\max}(P_N)=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N,
+\ \text{且主特征向量宏观局域于 } y_D^*=\tfrac12+\tfrac{1}{2}\log N .
+\end{equation}
+边界交叉块\textbf{渐近秩一}：
+\begin{equation}\label{eq:cross}
+Q_-D_NQ_+=c_N\,e_-\otimes e_++o(\log N),\qquad c_N=\Bigl(\frac{\pi}{2e^2}+o(1)\Bigr)\log N,
+\end{equation}
+并已把它精确化为 Mellin 权的奇特征相关：
+$\Phi_-(u)\sim Cu\log\frac{1}{2u}$，$\Phi_+(u)\sim C'u^{-1-2\al}$。
+
+\textbf{终点}
+
+\COND\ \eqref{eq:Pncond}（条件 $\rho_N=o(\log N)$，比总目标弱得多）；
+\OPEN\ \textbf{无条件的匹配上界} $\lambda_{\max}(P_N)\ll\log N$：这是 $P_N$ 方向唯一真正的缺口，
+它等价于"$P_N$ 在 $D_N$ 主谱之外不产生额外的 $\log N$ 级谱"。
+
+\subsection{方向 IV：$T_N$（残差）}
+
+\textbf{已确立}
+\begin{itemize}
+\item 主论文（GRH）：$\|T_N\|_{\HS}\ll(\log N)^2$；Hypothesis $S$、$R$ 的条件性结论。
+\item \textbf{低低块精确为零}：$Q_-T_NQ_-=0$（由 $P_N=D_N$ 的低尺度压缩 + $K_N$ 的低尺度为零）。
+\item \textbf{$K_N$ 低高块无条件小}：$\|Q_-K_NQ_+\|\ll(\log\log(3N))^2=o(\log N)$。
+\item 两个\textbf{双向}残差诊断：
+$\|T_N\|\ge\|Q_-P_NQ_+-c_Ne_-\otimes e_+\|-O((\log\log N)^2)-o(\log N)$；
+$\|T_N\|\ge|\langle P_Nh_{W,N},h_{W,N}\rangle-\frac{2\pi}{e^3}\log N|-O((\log\log N)^2)-o(\log N)$。
+\item 判定（第 19 份记录）：\textbf{$Q_-T_NQ_-=0$ 不蕴含 $T_N$ 小}——大谱可能藏在低高块或高高块。
+\end{itemize}
+
+\textbf{新预印本的冲击（第 21 份记录）}
+一篇 2026-11-21 的 v1 预印本断言（Dirichlet GRH 下）对每个足够大区间内大量偶数 $N$ 有
+$\sqrt N\|T_N\|>(\log N)^D$。经重推，核心恒等式为
+\begin{equation}\label{eq:preprint}
+\langle T_Nv_g,v_f\rangle=-\frac{1}{N}\sum_{\substack{m<N\\(m,N)=1}}\Lambda(m)b(m)\bigl(\Lambda(N-m)-\Lambda(N+m)\bigr),
+\end{equation}
+且在该测试向量上 $D_N$ 与 $K_N$ 的矩阵元\textbf{严格为零}，异常完全由 $P_N$ 的奇特征相关项承载。
+三个关键判定：
+\begin{enumerate}[label=(\alph*)]
+\item 尺度上 $\|T_N\|\gg(\log N)^D/\sqrt N\to0$：\textbf{推翻 $R$ 级全局上界，不推翻 $S$}；
+\item 与主论文的平衡测试向量 $v_\phi$（支撑于 $[1/3,2/3]$）\textbf{严格解耦}：
+$\langle T_Nv_\phi,v_f\rangle=\langle T_Nv_\phi,v_g\rangle=0$（精确零，非 $o(1)$）；
+\item 由 $2\times2$ 压缩矩阵行列式为 $-|r|^2<0$，这些 $N$ 的 $T_N$ \textbf{必同时有正、负谱}。
+\end{enumerate}
+
+\textbf{终点}
+
+\BLOCK\ "证明全局 $\|T_N\|$ 小"应\textbf{从首要目标中撤下}；
+新的首要目标是\COND\ 的"平衡 Goldbach 标量"
+\begin{equation}\label{eq:balanced}
+\mathcal R_\phi(N)=\langle T_Nv_\phi,v_\phi\rangle=c_\phi\mathfrak S(N)-G_\phi(N),
+\quad
+G_\phi(N)=\frac1N\!\!\sum_{\substack{n+m=N\\(nm,N)=1}}\!\!\Lambda(n)\Lambda(m)\phi(n/N)\phi(m/N).
+\end{equation}
+注意：预印本构造的 $N$ 虽有大量 $N=p+q$，但小素数 $p\le(\log N)^C$ 落在 $\phi$ 的支撑之外，
+\textbf{不贡献 $G_\phi(N)$}。
+
+\subsection{方向 V：算子间恒等式与所缺的算术输入}
+
+\textbf{已确立的全局图景}
+\begin{equation}\label{eq:picture}
+\boxed{
+\begin{array}{c}
+D_N:\ \text{低算术尺度上的正高斯谱（中心 } y_D^*=\tfrac12\log N+\tfrac12\text{）}\\[1mm]
+K_N:\ \text{高 Mellin 尺度上的负高斯谱（中心 } x^*_{K}=\LN+\tfrac{1}{2\al}-h_N\text{）}\\[1mm]
+P_N:\ \text{奇特征框架与低尺度压缩所形成的正谱}\\[1mm]
+T_N:\ \text{三者之差，尚未控制；其大谱已被证明只能藏在低--高耦合或高高块}
+\end{array}}
+\end{equation}
+两族主峰相距约 $\frac12\log N$，这是 $P_N\approx D_N-W_N$ 能够成立的结构性原因。
+
+\textbf{局部方差三公式（第 7 份记录）}
+\begin{equation}\label{eq:threevar}
+P_N\approx X\min(\log X,\log N)\!\int\! W^2,\quad
+D_N\approx X\log X\!\int\! W^2,\quad
+W_N\approx X(\log X-\log N)_+\!\int\! W^2,
+\end{equation}
+三者主项给出 $P_N\approx D_N-W_N$。
+
+\textbf{所缺的算术输入（三个，全部未证明）}
+\begin{enumerate}[label=\textbf{(A\arabic*)}]
+\item \textbf{反号协方差}：$C_q^{\mathrm{anti}}(X)=o(X\log q)$，
+等价形式为 $\sum_a(A(a)-\mu)\overline{(A(-a)-\mu)}$、$\sum_r S_W(r)^2$、
+奇偶 Dirichlet 特征族二阶矩差。
+\item \textbf{固定模 $N$ 的带权素数对相关}：即 \eqref{eq:balanced} 的
+$G_\phi(N)$，需要模 $N$ 固定、带高斯权、区分 $\pm r$ 的估计（结构上像 Barban--Davenport--Halberstam，
+但模固定，不能直接套用平均模数定理）。
+\item \textbf{Bhowmik 等 Lemma 10 / Theorem 4 的双线性余项奇偶性抵消}：
+能否用 $\chi(-1)$ 在共轭特征对角和中产生足够抵消，把 $O(X\log^2X)$ 或 $O(X\log^5X)$ 降到 $o(X\log q)$。
+\end{enumerate}
+
+\textbf{终点}
+
+\OPEN\ 三条算术输入全部未证；但它们把原来"抽象的三算子相消"化成了三个可分别攻击的具体估计，
+这是整条探索线在方法论上真正的终点位置。
+
+%=====================================================================
+\section{关于 $D_N$ 主特征值证明的意见汇总与回应}\label{sec:opinions}
+
+本节收集 21 份记录中\textbf{全部}针对 $D_N$ 主特征值证明（即
+$\|\mathcal D_N\|=(\frac{\pi}{e}+o(1))\log N$ 及其后续谱结论）的意见，
+逐条给出：出处、意见内容、判定与处理。
+
+\subsection*{意见汇总表}
+
+\begin{longtable}{@{}p{0.55cm}p{2.5cm}p{7.4cm}p{4.6cm}@{}}
+\toprule
+\# & 出处 & 意见 & 我的判定 \\
+\midrule
+\endhead
+1 & 进度 11 & §6.2「双边范数引理」下界证明含一处\textbf{不合法的积分比较}；它直接承担 $\|W_N\|\sim\frac{\pi}{e^3}\log N$ 的下界 & 成立，且属真实缺口；可用算子范数估计修补，不否定主定理 \\
+2 & 进度 12 & §6.3 右边界估计漏了 $(1+h_N)$；应为 $\|\mathcal W_{\be}\|\ll(1+h_N)N^{-1/4}\ll N^{-1/4}\log\log(3N)$ & 成立；仍是 $o(1/\al)$，不影响主项常数 \\
+3 & 进度 12 & DeepSeek 对 §5 的修补正确，但\textbf{还缺一项一般性假设}（须在整段测试区间上统一给出 $D(x)D(y)=F_*(1+O(\al))$） & 成立；已按其建议把修补推广到整个直积 \\
+4 & 进度 12 & 对 DeepSeek 报称的 Lean 形式化（当时 167 条定理 + 公理审计）\textbf{未取得源码，不作独立复核} & 成立；见第 \ref{sec:lean} 节的源码与复核清单 \\
+5 & 进度 14 & \textbf{Remark \texttt{eigenvector}}：只构造了峰值窗口上的近极大试验函数，未证明真正的顶特征向量集中在那里 & 成立，\textbf{8 条建议中最重要的一条}（详见下文 \S\ref{sec:remark}）\\
+6 & 进度 14 & 引言中精确核公式 $W_N(y)$ \textbf{漏写 $(q,N)=1$} & 成立；应统一为第 2 节的定义 \\
+7 & 进度 14 & $y_0$ 的使用：只给了 $y_0\ge\log3$，未明确 $y_0=O(\log\log N)$ & 成立；补：最小的 $q_1\nmid N$ 满足 $q_1\ll\log N$（否则所有 $p<q_1$ 整除 $N$，与素数定理矛盾）\\
+8 & 进度 14 & 中心块估计从 $\|\Dk-\Ak\|\le\epsilon\Ak$ 到算子范数的推导略写 & 成立；补写 $\bigl|\langle(\Dk-\Ak)f,f\rangle\bigr|\le\epsilon\langle\Ak|f|,|f|\rangle\le\epsilon\|\Ak\|\|f\|^2$ 再看正性 \\
+9 & 进度 14 & 排除 $p\mid N$ 的贡献 $O(x\log^2N)$ 需限定 $x$ 的范围 & 成立；限定在中心区间 $x=e^y,\ y\asymp\log N$ \\
+10 & 进度 14 & 交叉块估计 $(-,0),(0,+),(-,+)$ 三种情形写得混杂 & 成立；应分别列出 \\
+11 & 进度 14 & 数值实验缺离散化细节（网格宽度、截断、边界、求特征值方法） & 成立；或补细节，或移入附录 \\
+12 & 进度 14 & 术语：$\mathcal P_N$ 称"精确的特征投影"易被误读为正交投影 & 成立；改称"奇特征相关算子" \\
+13 & 进度 15 & 上一轮 Hardy 波包公式\textbf{多了一个 $e^{-y}$ 因子}，是不正确的 & 成立；已给出修正，全部波包以修正式为准 \\
+14 & 进度 19 & 再次强调 Remark \texttt{eigenvector} 应\textbf{先收紧}，待 \eqref{eq:Dspec} 完成后再恢复强表述 & 成立；与意见 5 合并处理 \\
+15 & 进度 19/20 & 加权 PNT 可大幅加强：$y\ge A(\log\log N)^2$ 时 $o(\al^M)$（任意固定 $M$） & 成立；这是把 $D_N$ 比较从"固定比例区间 $o(1)$"升级为"常数阶谱"的关键 \\
+16 & 进度 17 & 此前对 $P_N$ 低高块的\textbf{主项判断需要撤回} & 成立；已撤回，改为"先算 $K_N$ 混合块" \\
+17 & 进度 21 & 新预印本的反例\textbf{不打击 $D_N$ 结论}：在其测试向量上 $D_N$ 矩阵元严格为零 & 成立；但需注意这同时说明"$D_N$ 交叉项为零"不能用来证明 $T_N$ 小 \\
+\bottomrule
+\end{longtable}
+
+\subsection{重点回应一：Remark \texttt{eigenvector} 的过度陈述}\label{sec:remark}
+
+这是全部意见中最重要的一条，因为它不是措辞问题而是\textbf{证明与陈述的错位}。
+
+\paragraph{意见。}
+原稿 Remark 写"顶特征向量集中在峰值窗口"。
+但现有下界证明实际构造的是\textbf{区间常数试验函数}
+$f=B^{-1/2}\mathbf 1_I$（$I$ 为峰附近宽 $B=\al^{-1/2}$ 的区间），
+它只证明了
+\begin{equation}
+\langle\Dk_Nf,f\rangle=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N ,
+\end{equation}
+即\textbf{存在}局域化近极大向量；这\textbf{不是}"真正的顶特征向量局域化"。
+
+\paragraph{我的回应。}
+\begin{itemize}
+\item \textbf{判定}：意见成立，且严重性高于其余 7 条。
+在算子谱理论中，"存在近极大试验向量"与"顶特征向量局域化"之间隔着两步：
+谱隙正性与谱投影的紧性；原稿两步都没写。
+\item \textbf{短期处理}：把 Remark 改成\\
+"存在支撑于峰值窗口、宽度 $\al^{-1/2}$ 的局域化近极大向量"——这句是已有证明直接支持的。
+\item \textbf{长期处理}（第 13--17 份记录已铺好路）：一旦 \eqref{eq:Dspec} 的 Mosco 收敛成立，
+顶特征函数的高斯轮廓就作为推论自动得到，届时可恢复强表述。所需的额外输入是
+(i) 精确算子的位置紧性 $1-s_N(X)\ge c\min(\al X^2,1)-C\al$；
+(ii) 非局部动能紧性，其 Fourier 乘子比
+$\frac{1-\widehat k_{\al}(\xi)}{\al}=\frac{\xi^2}{(1+\al)^2+\al\xi^2}$；
+(iii) 三区域（$y<Y_N$、$Y_N\le y\le C/\al$、$y>C/\al$）的统一截断误差。
+\item \textbf{结论}：这条\textbf{不构成对主定理的反驳}，但必须改陈述，否则属于把"存在性"写成"识别性"。
+\end{itemize}
+
+\subsection{重点回应二：§6.2 双边范数引理的不合法积分比较（意见 1）}
+
+\paragraph{意见。}
+下界 $\|W_N\|\gtrsim\frac{\pi}{e^3}\log N$ 的证明中，有一处把"积分号下的点态比较"直接搬到算子范数上，
+缺少正性/单调性支撑。
+
+\paragraph{我的回应。}
+\begin{itemize}
+\item \textbf{判定}：成立，是真实缺口（比意见 2 严重，因为意见 2 只是常数层面的 $1+h_N$）。
+\item \textbf{修补的思路}：$W_N\ge0$ 是精确的（\eqref{eq:pole} 中权重 $x-\LN+h_N\ge0$），
+所以正确的做法是走 Rayleigh 商而非积分比较：
+取支撑在 $x^*_K$ 附近、宽 $1\ll L\ll\al^{-1/2}$ 的归一化试验向量 $f$，
+直接算 $\langle W_Nf,f\rangle$ 的下界，再用 $\|W_N\|\ge\langle W_Nf,f\rangle/\|f\|^2$。
+这正是第 5、13、15 份记录中"高斯波包 + 局部二次型"路线所做的。
+\item \textbf{附加好处}：这条修补同时解释了为什么上界（Schur 行积分）与下界（Rayleigh 商）能对上同一个常数
+$\frac{\pi}{e^3}$：因为两者的极限都由同一个 $g_0(v)=\pi e^{-|v|}$ 与同一个峰位 $x^*_K$ 决定。
+\item \textbf{结论}：\COND\ 主定理不因此受损，但该引理必须重写。
+\end{itemize}
+
+\subsection{重点回应三：右边界 $(1+h_N)$ 因子（意见 2）}
+
+\paragraph{意见。}
+原稿用 $\|\mathcal W_{\be}\|\ll N^{-1/4}$，但权重 $\varpi(x)=x-\LN+h_N$ 含 $h_N$。
+
+\paragraph{我的回应。}
+\begin{itemize}
+\item \textbf{判定}：成立且修补成本极低。
+\item \textbf{处理}：改为 $\|\mathcal W_{\be}\|\ll(1+h_N)N^{-1/4}\ll N^{-1/4}\log\log(3N)$。
+由于 $\al^{-1}=\log N$，这仍是 $o(1/\al)$，\textbf{主项常数 $\pi/e$ 完全不动}。
+\item \textbf{注意}：$h_N\ll\log\log(3N)$ 的上界由 \eqref{eq:hN} 给出，其中只用到 $\sum_{p\mid N}\frac{\log p}{p-1}\ll\log\log(3N)$（Mertens 型估计）。
+\end{itemize}
+
+\subsection{重点回应四：关于 Lean 形式化的独立复核（意见 4）}
+
+\paragraph{意见。}
+第 12 份记录明确写道："DeepSeek 所说的 Lean 167 条定理和公理审计，我目前没有取得对应的 Lean 源码，
+因此只能把它作为它报告的形式化进度，不能当成我已经独立复核的形式化证明。"
+
+\paragraph{我的回应。}
+\begin{itemize}
+\item \textbf{判定}：这条意见\textbf{完全正确}，且是全部意见中最应被认真对待的一条方法论批评。
+没有源码与可复现的编译命令，"形式化完成"只是单方面声明。
+\item \textbf{现状}（本次会话已核实）：形式化资产为\texttt{KN/Master.lean}，
+\textbf{221} 条声明（非 167 条，那是更早的快照），4775 行；
+工具链 \texttt{leanprover/lean4:v4.35.0}；
+终审抽样 20 条关键定理，\texttt{\#print axioms} 全部只返回
+\texttt{[propext, Classical.choice, Quot.sound]}；全文 \texttt{sorry} 出现 \textbf{0} 次。
+\item \textbf{必须补充的说明}：该形式化对应的是主论文的 $K_N$ 与 $\lambda_{\min}(K_N)=-(\frac{\pi}{e^3}+o(1))\log N$
+链条，\textbf{并不覆盖} $D_N$ 那篇稿件的 $\|\mathcal D_N\|=\frac{\pi}{e}\log N$。
+两者是不同算子的不同定理，不应混为一谈。
+\item \textbf{处理}：第 \ref{sec:lean} 节给出完整的上传/复现清单，
+使意见 4 的前提（无源码）不再成立。
+\end{itemize}
+
+\subsection{重点回应五：加强 PNT 与 $D_N$ 常数阶谱（意见 15）}
+
+\paragraph{意见/进展。}
+第 19、20 份记录指出：原稿只要"固定比例区间 $y\asymp\log N$ 上 $o(1)$ 相对误差"，
+但中心区的三个误差项实际分别为
+\[
+\frac{\text{PNT 误差}}{\text{主项}}\ll y^{C-1}e^{-c\sqrt y},\qquad
+\frac{\text{高次素数幂}}{\text{主项}}\ll ye^{-y/2},\qquad
+\frac{\text{剔除 }p\mid N}{\text{主项}}\ll\frac{(\log N)^2}{y}e^{-y},
+\]
+再叠加第二 Hardy 边界的 $O(e^{-2(\be-\al)y})$。取 $Y_N=A(\log\log N)^2$ 即得
+$\Dk_N=\Ak_N(1+o(\al^M))$ 对任意固定 $M$ 成立。
+
+\paragraph{我的回应。}
+\begin{itemize}
+\item \textbf{判定}：成立，并且这是把 $D_N$ 从"范数级"推进到"常数阶谱"的\textbf{技术枢纽}。
+\item \textbf{为什么关键}：常数阶谱要求模型误差远小于 $\al$；$o(\al^M)$ 给了任意多项式余量，
+于是 Mosco 收敛中"精确核 vs 模型核"的差异不再与谱隙 $\frac{2\sqrt2\pi}{e}$ 竞争。
+\item \textbf{仍需完成}：位置紧性（$1-s_N(X)\ge c\min(\al X^2,1)-C\al$）与非局部动能紧性已写出；
+剩下的是把变系数非局部差分项的截断误差整理成完整的 Mosco 下半连续性与恢复序列证明。
+\item \textbf{结论}：\COND\ \eqref{eq:Dspec} 从"猜想"升格为"待定稿的定理"，
+但\textbf{在 Mosco 证明写完之前不应标注为已证}。
+\end{itemize}
+
+\subsection{重点回应六：新预印本与 $D_N$ 结论的关系（意见 17）}
+
+\paragraph{意见/进展。}
+第 21 份记录核查的预印本断言 $\sqrt N\|T_N\|>(\log N)^D$（Dirichlet GRH 下，大量 $N$）。
+
+\paragraph{我的回应。}
+\begin{itemize}
+\item \textbf{对 $D_N$ 无影响}：该预印本的测试向量取 $f$ 支撑于 $[M,2M]$（$M$ 为 $\log N$ 的固定幂）、
+$g$ 支撑于 $(4/5,6/5)$，两者与 $D_N$ 的对角结构不相交，
+故 $\langle D_Nv_g,v_f\rangle=0$ 精确成立。所以 $D_N$ 的主特征值结论不受任何影响。
+\item \textbf{对 $K_N$ 也无影响}：同一记录核验了在该测试向量上
+$J_{f,g}(1)=0$、$J_{f,g}(k)=0\,(k\ge2)$ 且 $\int_0^\infty J_{f,g}(y)dy=0$，
+故 $K_N$ 的矩阵元亦严格为零。
+\item \textbf{真正的教训}：预印本打击的是"全局小范数"这一目标，
+即 $R$ 级 $\|T_N\|\ll\sqrt{\mathfrak S(N)\log^3N/N}$；
+它没有推翻 $S$（允许的尺度是 $\mathfrak S(N)/h(N)$），也没有推翻平衡标量 \eqref{eq:balanced}。
+\item \textbf{审查状态}：该预印本为 v1、标注主要由 AI 生成、作者声明对文本理解程度为"无"、
+无 DOI 与同行评审。第 21 份记录对主链条（奇特征正交、三个 Beta 积分、Buchstab 密度差、
+模数平均、短区间估计）作了第一轮逐步核对，暂未发现致命错误，但\textbf{不应视为已获社区检验的定理}。
+\end{itemize}
+
+\subsection{其余意见的统一回应（意见 6--13、16）}
+
+\begin{itemize}
+\item \textbf{意见 6、7、9、10、11、12}（引言漏 $(q,N)=1$；$y_0=O(\log\log N)$ 缺证；
+$p\mid N$ 项的 $x$ 范围；交叉块三分；数值实验细节；术语"精确投影"）：
+全部\textbf{接受}，属"表述与完整性"层面，逐条按建议修改即可，
+不触及 $D_N$ 主定理的任何一步实质推导。
+其中意见 7 需要的一条独立引理是：若 $q_1$ 为最小的 $q\nmid N$ 的素数，
+则所有 $p<q_1$ 整除 $N$，故 $\prod_{p<q_1}p\mid N$，由素数定理 $\prod_{p<q_1}p\approx e^{q_1}$ 得 $q_1\ll\log N$。
+\item \textbf{意见 8}（中心块从 $\|\Dk-\Ak\|\le\epsilon\Ak$ 到算子范数）：
+接受。正确写法是利用 $\Dk,\Ak$ 的\textbf{正性}：
+$\bigl|\langle(\Dk-\Ak)f,f\rangle\bigr|\le\epsilon\langle\Ak|f|,|f|\rangle\le\epsilon\|\Ak\|\,\|f\|^2$，
+于是该块的算子范数误差 $\le\epsilon\|\Ak\|$，再取 $\epsilon\to0$。
+\item \textbf{意见 13}（多出的 $e^{-y}$ 因子）：接受，已修正；
+这条影响的是第 13--15 份记录中波包族的具体表达式，\textbf{不影响}任何主项常数。
+\item \textbf{意见 16}（撤回 $P_N$ 低高块的主项判断）：接受，理由是 $K_N$ 的混合块必须\textbf{先于}
+$P_N$ 的交叉块计算；第 19 份记录已算出 $\|Q_-K_NQ_+\|\ll(\log\log(3N))^2$，
+因此 $P_N$ 交叉块的"主项"只能在扣除这一项之后讨论。
+\end{itemize}
+
+%=====================================================================
+\section{Lean 4 形式化的现状与可复核清单}\label{sec:lean}
+
+\subsection{现状（本次会话直接核实，非引述）}
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+项目 & 值 \\
+\midrule
+主文件 & \texttt{KN\_lean/lean/KN/Master.lean}，4775 行 \\
+声明数 & 221（\texttt{namespace KN} 内顶层声明） \\
+工具链 & \texttt{leanprover/lean4:v4.35.0} \\
+\texttt{sorry} 出现次数 & 0（全文扫描） \\
+抽样审计 & 20 条关键定理，\texttt{\#print axioms} 均仅返回
+\texttt{[propext, Classical.choice, Quot.sound]} \\
+上游依赖 & \texttt{Mathlib} + \texttt{ConditionalGoldbach.Proofs.DensityEuler} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+已形式化的五条核心链条（对应主论文）：
+\begin{enumerate}[label=(\arabic*),leftmargin=2.2em]
+\item 近似 Euler 恒等式：\texttt{eulerIdentity\_pointwise}；
+\item Lemma 3.2 与 $H_N$ 的导数界：\texttt{lemma\_3\_2}、\texttt{hasDerivWithinAt\_H}；
+\item Prop 6.2：$\|W_N\|=\frac{\pi}{e^3}\log N(1+o(1))$，即 \texttt{Wn\_div\_log\_tendsto\_pi\_e3}；
+\item Prop 5.4：$\|R_N\|_{\HS}^2\ll(\log\log N)^4$，即 \texttt{Prop54\_final}
+（其下有 19 个子引理：精确前因子界、括号项界、可积性、二重积分、积分单调性、四组合组装）；
+\item 量词装配：\texttt{KN\_ultimate}，结论
+$\operatorname{Tendsto}\bigl(\lambda\mapsto\langle K_Nh_N,h_N\rangle/\log N\bigr)\to-\pi/e^3$。
+\end{enumerate}
+
+\subsection{一个对复核很有用的事实}
+
+本次会话做了一次\textbf{自包含性实验}：把 \texttt{Master.lean} 的上游 \texttt{import} 删去后重新编译，
+\textbf{65 处错误全部落在第 13--794 行}（即 T3 Euler 乘积那一段 $H_{\mathrm{ratio}}$、\texttt{eulerIdentity\_*} 等
+依赖上游 \texttt{MathlibNt.SieveTheory.SingularSeries} 的声明），
+\textbf{第 795--4775 行（含 Prop 5.4 全部子引理、T6/T7/T8 装配与 \texttt{KN\_ultimate}）零错误}。
+这意味着：\textbf{主结论链条只需 \texttt{Mathlib}}，可裁出一个纯 Mathlib 的验证包，
+从而把"复核必须重现整条上游工程"的门槛降下来。
+
+\subsection{建议上传/复核的文件清单}
+
+\paragraph{A. 最小可验证包（仅需 \texttt{Mathlib}，推荐给外部审阅者）}
+\begin{enumerate}[leftmargin=2.2em]
+\item \texttt{lean/KN/Master.lean}（或按上节裁出的纯 Mathlib 子集）；
+\item \texttt{DECLARATIONS.md}（221 条声明清单，便于定位）；
+\item \texttt{AXIOMS.md}（公理审计记录）；
+\item 一个可编译的验证脚本：对若干定理执行 \texttt{\#print axioms}，输出应仅为三公理。
+\end{enumerate}
+
+\paragraph{B. 完整可复现包（需上游工程）}
+\begin{enumerate}[leftmargin=2.2em]
+\item \texttt{lean/KN/Master.lean}；
+\item \texttt{lakefile.toml} + \texttt{lean-toolchain} + \texttt{lake-manifest.json}
+（上游 \texttt{goldbach} 锁定在 \texttt{rev=24490c2ab7787238f816d771c9176411dcbda503}）；
+\item \texttt{formalization/ConditionalGoldbach/} 整个源码树（供 \texttt{ConditionalGoldbach.Proofs.DensityEuler} 可用）；
+\item \texttt{reports/} 中与形式化对应的最近若干份报告（说明每条定理的来处）；
+\item 编译命令：
+\texttt{ELAN\_HOME=<elan> lake env lean KN/Master.lean}
+（工作目录为 \texttt{formalization}）。
+\end{enumerate}
+
+\paragraph{C. 说明性材料（供"告知他人"）}
+\begin{enumerate}[leftmargin=2.2em]
+\item \texttt{STATUS.md}（工程状态总表）；
+\item \texttt{CONCLUSION.md} / \texttt{FINAL\_REPORT.md}（结论与路线总结）；
+\item \texttt{GOAL.md}（逐轮进展，体量大，可按需截取）；
+\item 本文档（把算子谱研究的 21 份记录与形式化状态放在同一份材料里）。
+\end{enumerate}
+
+\noindent
+\textbf{不建议上传的}：\texttt{lean/KnMasterCheck*.lean}（119 个审计副本，均为 \texttt{Master.lean} 的拷贝加若干
+\texttt{\#print axioms} 行，属中间产物）；\texttt{lemmas/} 下的草稿文件
+（已有内容并入 \texttt{Master.lean}）。
+
+%=====================================================================
+\section{结论}
+
+\begin{enumerate}[label=(\roman*),leftmargin=2.4em]
+\item 21 份记录的探索可归为五个方向的终点：
+$D_N$ 的\textbf{领先范数}已可确认（\eqref{eq:Dnorm}，不需 GRH），常数阶谱为待定稿定理；
+$K_N$ 的\textbf{负谱常数} $-\frac{\pi}{e^3}$ 可确认（条件为余项界 \eqref{eq:Krem} 定稿），
+且该链已\textbf{在 Lean 4 中形式化}；
+$P_N$ 得到\textbf{条件性}主谱 \eqref{eq:Pncond}，无条件上界是唯一真正缺口；
+$T_N$ 的"全局小范数"目标已被新预印本\textbf{限制}，应转为平衡标量 \eqref{eq:balanced}；
+三条所缺的算术输入已被精确定位（反号协方差、固定模带权素数对、Bhowmik 双线性余项）。
+
+\item 关于 $D_N$ 主特征值证明的 17 条意见中，
+\textbf{2 条涉及真实证明缺口}（\S6.2 双边范数引理的积分比较、Remark \texttt{eigenvector} 的识别性陈述），
+1 条是常数层面的修正（右边界 $(1+h_N)$），
+1 条是方法论批评（未取得 Lean 源码故不作独立复核，\textbf{最有价值的一条}），
+其余 13 条为表述、完整性、术语与数值实验细节。
+\textbf{没有任何一条否定} $\|\mathcal D_N\|=(\frac{\pi}{e}+o(1))\log N$ 本身。
+
+\item 对两条真实缺口的处理建议已给出：
+$D_N$ 的 Remark 先收紧为"存在局域化近极大向量"，待 \eqref{eq:Dspec} 的 Mosco 收敛完成后恢复强表述；
+$W_N$ 的下界改走 Rayleigh 商（正性 $W_N\ge0$ 是精确的）。
+这两处修补都\textbf{不改变任何主项常数}。
+
+\item 就"他人能否验证"而言，关键在于把"形式化完成"从单方面声明变成可复现证据：
+给出 \texttt{Master.lean}、锁定的上游版本、以及一条只需 \texttt{Mathlib} 的最小验证路径。
+本文第 \ref{sec:lean} 节已给出三档清单。
+\end{enumerate}
+
+\end{document}
