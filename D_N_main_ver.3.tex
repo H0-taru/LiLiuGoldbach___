@@ -1,0 +1,856 @@
+\documentclass[12pt,a4paper]{amsart}
+
+\usepackage[a4paper,textwidth=160mm,textheight=215mm]{geometry}
+\usepackage{amsfonts,amssymb,amsthm,amsmath,mathrsfs}
+\PassOptionsToPackage{no-math}{fontspec}
+\usepackage{xeCJK}
+\usepackage[hidelinks]{hyperref}
+
+\setCJKmainfont[BoldFont={SimHei},ItalicFont={KaiTi}]{SimSun}
+\setCJKsansfont{SimHei}
+\setCJKmonofont{SimSun}
+
+\linespread{1.30}
+\setlength{\parindent}{2em}
+\numberwithin{equation}{section}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{注}
+\newtheorem{definition}[theorem]{定义}
+
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\keywordsname}{关键词}
+\renewcommand{\subjclassname}{\textup{2020} 年数学主题分类}
+\renewcommand{\proofname}{证明}
+\renewcommand{\refname}{参考文献}
+
+\newcommand{\HS}{\mathrm{HS}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\eps}{\varepsilon}
+
+\begin{document}
+
+\title[对角算子的谱范数]{条件哥德巴赫方法中\\ 对角算子的谱范数}
+
+\author{}
+
+\date{}
+
+\subjclass[2020]{主分类 11N13；次分类 47B35, 47A75}
+
+\keywords{哥德巴赫猜想，对角算子，哈代空间，Schur 检验，加权素数定理}
+
+\begin{abstract}
+在 Li 与 Liu 的条件哥德巴赫方法中，加权哥德巴赫误差被精确表示为一个作用在
+哈代空间上的算子 $T_N=\mathcal P_N-\mathcal D_N-\mathcal K_N$ 的二次型。本文
+确定对角分量 $\mathcal D_N$ 的首阶范数：
+\[
+ \|\mathcal D_N\|=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N .
+\]
+证明用到 $\mathcal D_N$ 在 Fourier--Laplace 坐标下的精确核、加权素数定理、
+一个光滑模型核（其范数由 Schur 检验与匹配的试验向量精确到首阶），以及把模型
+范数搬回 $\mathcal D_N$ 的三区域比较。结论是无条件的，并且改进了 \cite{LL}
+中对角分量所用的希尔伯特--施密特界。
+\end{abstract}
+
+\maketitle
+
+\section{引言}
+
+\subsection*{1.1.\ 对角算子}
+
+在 \cite{LL} 中，Li 与 Liu 证明了二元哥德巴赫猜想的一个条件形式。他们的论证
+把加权哥德巴赫误差化归为竖直条带的哈代空间上一个紧自伴算子 $T_N$ 的精确二次型，
+且 $T_N$ 分解为
+\begin{equation}\label{eq:split}
+ T_N=\mathcal P_N-\mathcal D_N-\mathcal K_N,
+\end{equation}
+其中 $\mathcal D_N$ 是精确的\emph{算术对角分量}，$\mathcal K_N$ 是贝塔模型，而
+$\mathcal P_N$ 是\emph{奇特征相关算子}（它是形如 $UU^*$ 的正算子，但不是正交投影）。
+本文确定对角分量的首阶范数。
+
+设 $N>e^{10}$ 为偶数。我们沿用 \cite[\S5--6]{LL} 的记号：
+\[
+ \alpha_N=\frac1{\log N},\qquad \beta=\frac18,\qquad
+ S_N=\{s:\alpha_N<\Re s<\beta\},\qquad
+ \Gamma_N=(\alpha_N+i\mathbb R)\cup(\beta+i\mathbb R),
+\]
+而 $\mathcal H_N=H^2(S_N)$ 是条带的哈代空间，带边界范数
+\begin{equation}\label{eq:inner}
+ \langle h,g\rangle_{\mathcal H_N}
+ =\int_{\Gamma_N}h(s)\overline{g(s)}\,|\mathrm ds|;
+\end{equation}
+由 \cite[引理 5.2]{LL}，边界值在 $L^2$ 中存在，且 \eqref{eq:inner} 是
+$\mathcal H_N$ 的内积。内积对第一个变量线性，我们记
+$(f\otimes g)h=\langle h,g\rangle f$。
+
+对角算子是正秩一级数
+\begin{equation}\label{eq:DN}
+ \mathcal D_N=\sum_{(n,N)=1}\frac{\Lambda^2(n)}{n}\,d_n\otimes d_n,
+ \qquad d_n(s)=\frac{n^{-s}}{1+s},
+\end{equation}
+其中 $\Lambda$ 是冯·曼戈尔特函数。等价地，记 $q$ 为与 $N$ 互素的素数幂，
+\begin{equation}\label{eq:phiq}
+ \varphi_q(s)=\frac{q^{-1-s}}{1+s}=q^{-1}d_q(s),
+\end{equation}
+则
+\begin{equation}\label{eq:DN2}
+ \mathcal D_N=\sum_{q}q\Lambda(q)^2\,\varphi_q\otimes\varphi_q .
+\end{equation}
+该级数在迹范数下收敛，且 $\operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}$；
+见 \cite[命题 6.5]{LL}。为完整起见，我们把该界背后的计算写出来，因为它的幂次
+用在了 \eqref{eq:coarse} 与推论~\ref{cor:HS} 中。当 $\alpha_N\le\rho\le\beta$ 时
+$\|\varphi_q\|^2_{\mathcal H_N}\asymp q^{-1-2\rho}$，而由素数定理与部分求和
+$\sum_{q\le t}\Lambda(q)^2=t\log t+O(t)$；于是对 $0<\rho\le\beta$ 有
+\begin{equation}\label{eq:tracesum}
+ \sum_{q\le x}\Lambda(q)^2q^{-1-2\rho}
+ =(1+2\rho)\int_1^\infty t^{-2-2\rho}\,t\log t\dd t\,\bigl(1+o(1)\bigr)
+ =\frac{1+2\rho}{(2\rho)^2}\bigl(1+o(1)\bigr)\asymp\rho^{-2},
+\end{equation}
+这里用到 $\int_1^\infty t^{-1-2\rho}\log t\dd t=(2\rho)^{-2}$。以权重
+$q\Lambda(q)^2$ 对 $q$ 求和即得 $\operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}$。
+该命题只用到迹界，对算子范数而言它给出
+\begin{equation}\label{eq:coarse}
+ \|\mathcal D_N\|\le\|\mathcal D_N\|_{\HS}\le\operatorname{tr}\mathcal D_N
+ \ll(\log N)^2 .
+\end{equation}
+
+\subsection*{1.2.\ 结果陈述}
+
+\begin{theorem}\label{thm:main}
+设 $N>e^{10}$ 为偶数，$\mathcal D_N$ 为对角算子 \eqref{eq:DN}。则
+$\mathcal D_N$ 是自伴、正、迹类的，且
+\begin{equation}\label{eq:main}
+ \|\mathcal D_N\|=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N .
+\end{equation}
+\end{theorem}
+
+\begin{corollary}\label{cor:HS}
+有 $\|\mathcal D_N\|_{\HS}\ll(\log N)^{3/2}$。
+\end{corollary}
+
+\eqref{eq:main} 中的算子范数比迹界 \eqref{eq:coarse} 小一个 $\log N$ 量级的
+因子，比推论~\ref{cor:HS} 的希尔伯特--施密特界小一个 $(\log N)^{1/2}$ 因子。
+常数 $\pi/e$ 不是方法的产物：它是 $\mathcal D_N$ 在主谱方向上的局部极限——
+一个卷积核——的范数。
+
+\begin{remark}\label{rem:eigenvector}
+\emph{（实际被证明的是什么。）} 定理~\ref{thm:main} 的证明给出一族\emph{显式的
+局域化近极大向量}，而不是顶特征向量。具体地，记
+\begin{equation}\label{eq:peakpoint}
+ y_D^*=\frac12+\frac1{2\alpha_N},
+\end{equation}
+并取 $B=\alpha_N^{-1/2}$，则归一化的区间试验函数
+$f=B^{-1/2}\mathbf 1_{[y_D^*-B/2,\,y_D^*+B/2]}$ 满足
+\[
+ \langle\mathcal D_Nf,f\rangle\ge\Bigl(\frac{\pi}{e}-o(1)\Bigr)\alpha_N^{-1};
+\]
+这正是第~\ref{sec:model} 节的匹配下界与定理~\ref{thm:main} 合起来给出的结论。
+于是算子范数在相差 $o(\alpha_N^{-1})$ 的意义下由这样的向量取到：它们的
+Fourier--Laplace 质量局域在 $y_D^*$ 附近、宽度 $\ll\alpha_N^{-1/2}$，即落在
+$\log q\approx\frac12\log N$ 的素数幂上。
+
+必须强调仍然存在的逻辑缺口。要\emph{识别}真正的顶特征向量（以及它的高斯轮廓），
+还需两项输入：(i) 顶端的谱隙
+$\lambda_0(\mathcal D_N)-\lambda_1(\mathcal D_N)\gg1$；(ii) 一个谱投影
+（或 Mosco 型）论证，说明上述近极大向量收敛到顶谱子空间。本文两者均未证明；
+且上面的试验函数是阶梯函数，而特征函数候选是光滑的（在缩放变量
+$X=\sqrt{\alpha_N}(y-y_D^*)$ 下形如 Hermite 轮廓 $Ce^{-X^2/\sqrt2}$）。
+因此本文的结论只涉及算子范数。
+\end{remark}
+
+\begin{remark}\label{rem:numerical}
+对模型核 \eqref{eq:model} 作离散化，可得
+$\lambda_{\max}(\mathscr A_N)\big/\bigl(\pi/(e\alpha_N)\bigr)$ 的近似值。有两件事
+必须与数字一并记录。
+
+\emph{(a) 关键参数是网格步长。} 核 $\mathscr A_N$ 在 $y=u$ 对角线上不光滑，且在差变量
+上按 $e^{-(1+\alpha_N)|y-u|}$ 衰减，故步长 $h$ 必须远小于 $1$——而不是只要求远小于
+$\alpha_N^{-1}$。取缩放窗口 $|X|\le10$、$X=\sqrt{\alpha_N}(y-y_D^*)$、复合中点求积，
+并在 $y$ 上取均匀网格：
+\[
+\begin{array}{c|ccc}
+\alpha_N & h=0.1 & h=0.05 & h=0.025\\ \hline
+0.1    & 0.7302 & 0.7297 & 0.7295\\
+0.05   & 0.8497 & 0.8491 & 0.8489\\
+0.025  & 0.9206 & 0.9200 & 0.9199\\
+0.0125 & 0.9595 & 0.9589 & 0.9587
+\end{array}
+\]
+$h=0.05$ 与 $h=0.025$ 两列之差小于 $10^{-3}$。作为对照：若在整段
+$[y_0,y_0+40/\alpha_N]$ 上只取 $2000$--$8000$ 个均匀点，则 $h\asymp1$，得到
+$0.730,\,0.850,\,0.923,\,0.972$；该列表末几项是受网格限制的读数而非极限值
+（$\alpha_N=0.0125$ 取 $2000$ 点时算得 $1.16$，超过 $1$，只能是离散化误差）。
+
+\emph{(b) 不声称单调性、也不给出速率。} 在所列四个 $\alpha_N$ 下，比值随
+$\alpha_N$ 减小而增大，这与
+$\lambda_{\max}(\mathscr A_N)\big/\bigl(\pi/(e\alpha_N)\bigr)\to1$ 相符；该断言是
+$o(1)$，可以任意慢，故本文不声称关于 $\alpha_N$ 的单调性，也不给出速率。这些数值
+只作说明，证明中不使用。
+\end{remark}
+
+\subsection*{1.3.\ 方法}
+
+证明分五步。
+
+\begin{enumerate}
+\item[\rm(A)] \emph{精确核。} 在 Fourier--Laplace 坐标 $y=\log q$ 下，
+$\mathcal D_N$ 成为积分算子，其核为
+\[
+ \mathscr D_N(y,u)=2\pi W_N(\min(y,u))\sqrt{m(y)m(u)},\qquad
+ W_N(y)=\sum_{\substack{q\le e^y\\(q,N)=1}}q\Lambda(q)^2 ,
+\]
+其中 $m(y)=e^{-2(1+\alpha_N)y}+e^{-2(1+\beta)y}$（第~\ref{sec:kernel} 节）。
+\item[\rm(B)] \emph{加权素数定理。} 权重 $W_N$ 在
+$y\in[c/\alpha_N,C/\alpha_N]$ 上一致满足
+$W_N(y)=\frac12e^{2y}(y-\frac12)(1+o(1))$（第~\ref{sec:pnt} 节）。
+\item[\rm(C)] \emph{模型核。} 在该区域中把 $\mathscr D_N$ 换成显式核
+\[
+ \mathscr A_N(y,u)=\pi\Bigl(\min(y,u)-\frac12\Bigr)
+ e^{-2\alpha_N\min(y,u)}e^{-(1+\alpha_N)|y-u|},
+\]
+其范数由 Schur 检验与匹配的试验向量算出（第~\ref{sec:model} 节）。
+\item[\rm(D)] \emph{比较。} 对 $y$ 轴作三区域分解，表明模型范数与
+$\mathcal D_N$ 的范数相差 $o(\alpha_N^{-1})$（第~\ref{sec:compare} 节）。
+\item[\rm(E)] \emph{合拢。} 由 $\|\mathscr A_N\|\sim\pi/(e\alpha_N)$ 即得定理
+（第~\ref{sec:proof} 节）。
+\end{enumerate}
+
+\subsection*{1.4.\ 约定}
+
+记 $f\ll g$ 与 $f=O(g)$ 表示 $|f|\le Cg$，$C$ 为绝对常数；下标表示常数依赖。
+除非另行说明，所有常数都是绝对的。我们不使用任何未证假设：算子 $\mathcal D_N$
+的来源是算术的，但它的核估计是解析的。
+
+\subsection*{1.5.\ 关于本版本的说明}
+
+本版本相对初稿作了如下订正。它们都不改变定理~\ref{thm:main} 的陈述与常数，
+但其中两条补上了实质性的论述缺口。
+
+\begin{enumerate}
+\item[\rm(i)] 关于顶特征向量的陈述已收窄为证明实际给出的内容：\emph{局域化近极大
+向量}的存在性；并明确指出识别顶特征向量还缺两项输入（谱隙与谱投影）。见注~\ref{rem:eigenvector}。
+\item[\rm(ii)] \S1.3 中 $W_N$ 的定义已与 \eqref{eq:Dkernel} 统一：求和现在带有
+限制 $(q,N)=1$。
+\item[\rm(iii)] 在 \S\ref{sec:compare} 中反复使用的估计 $y_0=O(\log\log N)$
+现在给出证明而非默认；见 \eqref{eq:y0small} 及其后的几行。
+\item[\rm(iv)] 中心块中从核不等式
+$|\mathscr D_N-\mathscr A_N|\le\epsilon_N\mathscr A_N$ 到算子不等式的过渡，
+现在通过二次型与 $\mathscr A_N$ 的正性写出。见引理~\ref{lem:center} 的证明。
+\item[\rm(v)] 关于 $p\mid N$ 贡献的估计，其适用的 $x$ 范围现在在
+注~\ref{rem:primepowers} 中显式写出。
+\item[\rm(vi)] \S5.7 的交叉块估计现在对 $(-,0)$、$(0,+)$、$(-,+)$ 三种情形分别列出；
+此前是合并写的。
+\item[\rm(vii)] 数值注现在记录了复现所需的离散化细节（截断点、网格、求积规则、
+特征值算法）；见注~\ref{rem:numerical}。
+\item[\rm(viii)] 算子 $\mathcal P_N$ 不再称为"精确的特征投影"（它不是正交投影），
+而称为\emph{奇特征相关算子}；见 \S1.1。
+\item[\rm(ix)] 关于 $\operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}$ 的迹类计算现已写出：
+用 $\sum_{q\le t}\Lambda(q)^2=t\log t+O(t)$ 与部分求和；见 \eqref{eq:tracesum}。
+\item[\rm(x)] 整除 $N$ 的素数的幂的估计现已推导而非引用：
+$\sum_{p\mid N,\,p^a\le x}p^a(\log p)^2\ll x\log x\log N\ll x\log^2N$；
+见注~\ref{rem:primepowers}。
+\item[\rm(xi)] 极限顺序（先 $N\to\infty$，再 $c\downarrow0$、$C\uparrow\infty$）现已在
+命题~\ref{prop:compare} 与定理~\ref{thm:main} 的证明中显式写出。
+\item[\rm(xii)] 现已核对匹配试验向量的支撑落在 $[y_0,\infty)$ 内，即
+$y_D^*-B_N/2>y_0$；见引理~\ref{lem:lower} 的证明。
+\item[\rm(xiii)] 数值注已重写：现在把步长与数值一并报告，展示关于步长的收敛性，
+并明确否认关于 $\alpha_N$ 的单调性或速率的任何断言；见注~\ref{rem:numerical}。
+\item[\rm(xiv)] "精确的对角算子"改为"精确的算术对角分量"，以免暗示 $\mathcal D_N$
+在 Fourier--Laplace 表示下是对角的。
+\end{enumerate}
+
+\section{哈代空间与精确核}\label{sec:kernel}
+
+\subsection*{2.1.\ 哈代空间}
+
+我们回顾 \cite[\S5]{LL} 中 $\mathcal H_N$ 的描述。函数 $h$ 属于 $H^2(S_N)$，
+如果它在 $S_N$ 中全纯且
+\[
+ \|h\|^2_{H^2(S_N)}
+ =\sup_{0<\eps<(\beta-\alpha_N)/2}
+ \int_{\mathbb R}\bigl(|h(\alpha_N+\eps+it)|^2+|h(\beta-\eps+it)|^2\bigr)\dd t<\infty .
+\]
+边界值在 $L^2$ 中存在，且 \eqref{eq:inner} 成立。Fourier--Laplace 表示为
+\begin{equation}\label{eq:PW}
+ h(s)=\frac1{\sqrt{2\pi}}\int_{\mathbb R}\psi(\tau)e^{s\tau}\dd\tau,
+ \qquad
+ \|h\|^2_{\mathcal H_N}=\int_{\mathbb R}|\psi(\tau)|^2w_H(\tau)\dd\tau,
+\end{equation}
+其中 $w_H(\tau)=e^{2\alpha_N\tau}+e^{2\beta\tau}$（见 \cite[引理 5.2]{LL}）。
+
+\subsection*{2.2.\ 核}
+
+\begin{lemma}\label{lem:kernel}
+对 $s,z\in\Gamma_N$，
+\begin{equation}\label{eq:kernel}
+ \kappa_N(s,z):=\sum_{(n,N)=1}\frac{\Lambda^2(n)}{n}\,d_n(s)\overline{d_n(z)}
+ =\sum_q q\Lambda(q)^2\varphi_q(s)\overline{\varphi_q(z)} .
+\end{equation}
+因此 $\mathcal D_N$ 自伴、正，且
+\begin{equation}\label{eq:trace}
+ \operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+两个表达式相等，因为 $d_n=n\varphi_n$ 而权重为 $q\Lambda(q)^2$；更精确地，
+$q\Lambda(q)^2\varphi_q\otimes\varphi_q=\Lambda(q)^2q^{-1}d_q\otimes d_q$。
+该算子是系数非负的秩一算子 $\varphi\otimes\varphi$ 之和，故正且自伴。最后，
+\[
+ \|\varphi_q\|^2=\sum_{\rho\in\{\alpha_N,\beta\}}q^{-2(1+\rho)}
+ \int_{\mathbb R}\frac{\dd t}{(1+\rho)^2+t^2}
+ =\pi\sum_{\rho\in\{\alpha_N,\beta\}}\frac{q^{-2(1+\rho)}}{1+\rho},
+\]
+故
+\[
+ \operatorname{tr}\mathcal D_N
+ =\pi\sum_{\rho\in\{\alpha_N,\beta\}}\frac1{1+\rho}
+ \sum_q\Lambda(q)^2q^{-1-2\rho}\ll\alpha_N^{-2},
+\]
+因为当 $0<\rho\le\beta$ 时 $\sum_q\Lambda(q)^2q^{-1-2\rho}\asymp(2\rho)^{-2}$。
+\end{proof}
+
+\subsection*{2.3.\ Fourier--Laplace 坐标}
+
+置
+\begin{equation}\label{eq:m}
+ y=-\tau,\qquad m(y)=e^{-2(1+\alpha_N)y}+e^{-2(1+\beta)y},
+\end{equation}
+对 $h\in\mathcal H_N$（变换为 $\psi$）令 $f(y)=\psi(-y)\sqrt{w_H(-y)}$。则
+$y\mapsto f$ 是从 $\mathcal H_N$ 到 $L^2(\mathbb R,\dd y)$ 的酉映射，且
+\begin{equation}\label{eq:unit}
+ \|h\|_{\mathcal H_N}=\|f\|_{L^2(\dd y)} .
+\end{equation}
+设 $y_0=\log q_1$，其中 $q_1$ 是与 $N$ 互素的最小素数幂。由于 $N$ 为偶数，
+$q_1\ge3$，故在下文核的支集上
+\begin{equation}\label{eq:y0}
+ y\ge y_0\ge\log3>\frac12 .
+\end{equation}
+下面还会多次用到 $y_0$ 相对于 $\log N$ 很小这一事实：
+\begin{equation}\label{eq:y0small}
+ y_0\le\log\log N+O(1),\qquad\text{即}\quad y_0=O(\log\log N).
+\end{equation}
+事实上，每个小于 $q_1$ 的素数 $p$ 都整除 $N$（否则 $p$ 本身就是与 $N$ 互素
+且小于 $q_1$ 的素数幂），因此 $\prod_{p<q_1}p\mid N$，从而
+$\prod_{p<q_1}p\le N$。由素数定理 $\prod_{p<q_1}p=e^{q_1(1+o(1))}$，故
+$q_1\le(\log N)(1+o(1))$，即得 \eqref{eq:y0small}。特别地，对充分大的 $N$ 有
+$y_0\le\frac12\log N$，故 $y_0$ 总是远低于峰值
+$y_D^*=\frac12+\frac1{2\alpha_N}$。
+
+\begin{lemma}\label{lem:FL}
+在酉映射 \eqref{eq:unit} 下，算子 $\mathcal D_N$ 成为 $L^2(\dd y)$ 上的积分
+算子，核为
+\begin{equation}\label{eq:Dkernel}
+ \mathscr D_N(y,u)=2\pi\,W_N(\min(y,u))\,\sqrt{m(y)m(u)},
+ \qquad
+ W_N(y)=\sum_{\substack{q\le e^y\\(q,N)=1}}q\Lambda(q)^2 .
+\end{equation}
+特别地，$\mathscr D_N(y,u)=0$ 除非 $y,u\ge y_0$。
+\end{lemma}
+
+\begin{proof}
+对 $s\in\Gamma_N$，
+\[
+ \varphi_q(s)=\frac{q^{-1-s}}{1+s}=\int_{\log q}^{\infty}e^{-(1+s)v}\dd v
+ =\int_{-\infty}^{-\log q}e^{(1+s)\tau}\dd\tau,
+\]
+故在 \eqref{eq:PW} 中 $\psi_q(\tau)=\sqrt{2\pi}e^{\tau}\mathbf 1_{\tau\le-\log q}$。
+在加权表示 $L^2(w_H\dd\tau)$ 中，$\varphi_q\otimes\varphi_q$ 的核为
+$2\pi e^{\tau+\tau'}\mathbf 1_{\tau,\tau'\le-\log q}$。经 $\psi\mapsto\psi\sqrt{w_H}$
+单位化并令 $y=-\tau$，得
+\[
+ 2\pi e^{-y-u}\sqrt{w_H(-y)w_H(-u)}\mathbf 1_{y,u\ge\log q}
+ =2\pi\sqrt{m(y)m(u)}\mathbf 1_{y,u\ge\log q} .
+\]
+对 $q\le\min(e^y,e^u)$ 以权重 $q\Lambda(q)^2$ 求和即得 \eqref{eq:Dkernel}。
+\end{proof}
+
+\section{加权素数定理与模型核}\label{sec:pnt}
+
+\subsection*{3.1.\ 加权素数定理}
+
+\begin{lemma}\label{lem:pnt}
+对 $x\ge2$，
+\begin{equation}\label{eq:pnt}
+ \sum_{p\le x}p(\log p)^2
+ =\frac12x^2\log x-\frac14x^2+O\bigl(x^2(\log x)^Ce^{-c\sqrt{\log x}}\bigr),
+\end{equation}
+其中 $C,c>0$ 为绝对常数。
+\end{lemma}
+
+\begin{proof}
+由形如
+$\theta(x)=\sum_{p\le x}\log p=x+O(xe^{-c\sqrt{\log x}})$ 的素数定理与部分求和，
+\[
+ \sum_{p\le x}p(\log p)^2=\int_2^x t\log t\,\dd\theta(t)
+ =\int_2^x t\log t\,\dd t+O\bigl(x^2(\log x)^Ce^{-c\sqrt{\log x}}\bigr),
+\]
+而 $\int_2^x t\log t\,\dd t=\frac12x^2\log x-\frac14x^2+O(1)$。
+\end{proof}
+
+\begin{remark}\label{rem:primepowers}
+高次素数幂 $q=p^a$（$a\ge2$）对 $\sum_{q\le x}q\Lambda(q)^2$ 的贡献为
+$\ll x^{3/2}\log^2x$。限制 $(q,N)=1$ 去掉的是整除 $N$ 的素数的幂；这一估计是
+$N$ 的因子结构唯一进入 $\mathcal D_N$ 本身的地方，故我们把它写出来。对 $p\mid N$，
+\[
+ \sum_{a:\,p^a\le x}p^{a-1}(\log p)^2\ll x(\log p)^2 ,
+\]
+且 $\sum_{p\mid N}(\log p)^2\le\log x\sum_{p\mid N}\log p\le\log x\log N$，故
+被去掉部分的总贡献为
+\[
+ \ll x\log x\log N\ \ll_A\ x\log^2N\qquad(2\le x\le N^A).
+\]
+这两个界对 $2\le x\le N^{A}$（$A$ 固定）一致成立——特别地，在下文唯一用到的范围
+$x=e^y$、$y\asymp\log N$ 内成立。（对更大的 $x$，$\ll x\log^2N$ 已不再有用，
+但下文从不在那里使用它。）在下文的范围内两者都是低阶项。
+\end{remark}
+
+\subsection*{3.2.\ $W_N$ 的渐近}
+
+\begin{lemma}\label{lem:W}
+对固定的 $0<c<C<\infty$ 与 $y\in[c/\alpha_N,C/\alpha_N]$，有
+\begin{equation}\label{eq:W}
+ W_N(y)=\frac12e^{2y}\Bigl(y-\frac12\Bigr)\bigl(1+o(1)\bigr),
+\end{equation}
+且在该范围内一致。
+\end{lemma}
+
+\begin{proof}
+取 $x=e^y$，由引理~\ref{lem:pnt}，
+\[
+ W_N(y)=\frac12e^{2y}y-\frac14e^{2y}+O\bigl(e^{2y}y^Ce^{-c\sqrt{y}}\bigr)
+ =e^{2y}\Bigl(\frac y2-\frac14\Bigr)(1+o(1)),
+\]
+而 $\frac y2-\frac14=\frac12(y-\frac12)$。低阶项即注~\ref{rem:primepowers}
+中的项；误差在 $y\in[c/\alpha_N,C/\alpha_N]$ 上一致，因为
+$e^{-c\sqrt{y}}\to0$ 而 $y^C$ 被 $\alpha_N^{-1}$ 的幂控制。
+\end{proof}
+
+\subsection*{3.3.\ 模型核}
+
+在 \eqref{eq:W} 成立的区域中，$\sqrt{m(y)m(u)}$ 里的第二边界项指数小：
+\begin{equation}\label{eq:second}
+ \sqrt{m(y)m(u)}
+ =e^{-(1+\alpha_N)(y+u)}
+ \bigl(1+O(e^{-2(\beta-\alpha_N)\min(y,u)})\bigr).
+\end{equation}
+事实上 $m(y)=e^{-2(1+\alpha_N)y}(1+e^{-2(\beta-\alpha_N)y})$，而当
+$y\ge c/\alpha_N$ 时 $e^{-2(\beta-\alpha_N)y}\le e^{-2(\beta-\alpha_N)c/\alpha_N}\to0$。
+这引出如下定义。
+
+\begin{definition}\label{def:model}
+模型核为
+\begin{equation}\label{eq:model}
+ \mathscr A_N(y,u)=\pi\Bigl(\min(y,u)-\frac12\Bigr)
+ e^{-2\alpha_N\min(y,u)}e^{-(1+\alpha_N)|y-u|},
+ \qquad y,u\ge y_0 .
+\end{equation}
+\end{definition}
+
+\begin{lemma}\label{lem:close}
+对固定的 $0<c<C<\infty$ 与 $y,u\in I_0=[c/\alpha_N,C/\alpha_N]$，
+\begin{equation}\label{eq:close}
+ \mathscr D_N(y,u)=\mathscr A_N(y,u)\bigl(1+O(\epsilon_N(c,C))\bigr),
+ \qquad \epsilon_N(c,C)\longrightarrow0 .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+在 $I_0$ 上，引理~\ref{lem:W} 一致地给出
+$W_N(\min)=\frac12e^{2\min}(\min-\frac12)(1+o(1))$，而 \eqref{eq:second}
+给出第二个因子。相乘得
+\[
+ \begin{aligned}
+ \mathscr D_N
+ &=2\pi\cdot\frac12 e^{2\min}\Bigl(\min-\frac12\Bigr)e^{-(1+\alpha_N)(y+u)}(1+o(1))\\
+ &=\pi\Bigl(\min-\frac12\Bigr)e^{2\min-(1+\alpha_N)(y+u)}(1+o(1)).
+ \end{aligned}
+\]
+由于 $2\min-(1+\alpha_N)(y+u)=-2\alpha_N\min-(1+\alpha_N)|y-u|$，这正是
+\eqref{eq:model}，相对误差为 $o(1)$。
+\end{proof}
+
+\section{模型算子的范数}\label{sec:model}
+
+本节中 $\mathscr A_N$ 始终表示 $[y_0,\infty)\times[y_0,\infty)$ 上的核
+\eqref{eq:model}，并视为 $L^2([y_0,\infty))$ 上的算子。
+
+\subsection*{4.1.\ Schur 检验}
+
+置
+\begin{equation}\label{eq:Valpha}
+ V_\alpha(y)=\Bigl(y-\frac12\Bigr)e^{-2\alpha_Ny},\qquad y\ge y_0 .
+\end{equation}
+则 $\mathscr A_N(y,u)=\pi V_\alpha(\min(y,u))e^{-(1+\alpha_N)|y-u|}$。
+
+\begin{lemma}\label{lem:schur}
+对 $u\le y$，
+\begin{equation}\label{eq:ratio}
+ \frac{V_\alpha(u)}{V_\alpha(y)}e^{-(1+\alpha_N)(y-u)}
+ \le e^{-(1-\alpha_N)(y-u)},
+\end{equation}
+从而
+\begin{equation}\label{eq:schur}
+ \sup_{y\ge y_0}\int_{y_0}^{\infty}\mathscr A_N(y,u)\dd u
+ \le\pi\|V_\alpha\|_\infty
+ \Bigl(\frac1{1-\alpha_N}+\frac1{1+\alpha_N}\Bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+对 $u\le y$，有 $(u-\frac12)/(y-\frac12)\le1$ 与
+$e^{-2\alpha_N(u-y)}=e^{2\alpha_N(y-u)}$，这给出 \eqref{eq:ratio}。于是
+\[
+ \int_{y_0}^{y}\mathscr A_N(y,u)\dd u
+ \le\pi\|V_\alpha\|_\infty\int_{y_0}^{y}e^{-(1-\alpha_N)(y-u)}\dd u
+ \le\frac{\pi\|V_\alpha\|_\infty}{1-\alpha_N},
+\]
+且
+\[
+ \int_{y}^{\infty}\mathscr A_N(y,u)\dd u
+ =\pi V_\alpha(y)\int_0^{\infty}e^{-(1+\alpha_N)v}\dd v
+ \le\frac{\pi\|V_\alpha\|_\infty}{1+\alpha_N}.
+\]
+两式相加即得 \eqref{eq:schur}。
+\end{proof}
+
+\subsection*{4.2.\ 峰值}
+
+\begin{lemma}\label{lem:peak}
+函数 $V_\alpha$ 在 $[y_0,\infty)$ 上的最大值在
+\begin{equation}\label{eq:ystar}
+ y_D^*=\frac12+\frac1{2\alpha_N}
+\end{equation}
+处取得，且
+\begin{equation}\label{eq:peak}
+ V_\alpha(y_D^*)=\frac{e^{-1-\alpha_N}}{2\alpha_N}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+$V_\alpha'(y)=e^{-2\alpha_Ny}[1-2\alpha_N(y-\frac12)]$ 在 $y_D^*$ 处为零，
+且在该点由正变负；对大 $N$ 有 $y_D^*>y_0$。代入即得数值。
+\end{proof}
+
+\begin{proposition}\label{prop:schur}
+有
+\begin{equation}\label{eq:upper}
+ \|\mathscr A_N\|\le\frac{\pi e^{-1-\alpha_N}}{\alpha_N(1-\alpha_N^2)}
+ =\frac{\pi}{e\alpha_N}(1+o(1)).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+把 \eqref{eq:schur} 与 \eqref{eq:peak} 结合。
+\end{proof}
+
+\subsection*{4.3.\ 匹配下界}
+
+\begin{lemma}\label{lem:lower}
+有
+\begin{equation}\label{eq:lower}
+ \|\mathscr A_N\|\ge\frac{\pi e^{-1-\alpha_N}}{2\alpha_N}
+ \cdot\frac{2}{1+\alpha_N}(1-o(1))
+ =\frac{\pi}{e\alpha_N}(1-o(1)).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+置 $B_N=\alpha_N^{-1/2}$ 与
+\[
+ J_N=\Bigl[y_D^*-\frac{B_N}2,\;y_D^*+\frac{B_N}2\Bigr],
+ \qquad f_N=B_N^{-1/2}\mathbf 1_{J_N},
+\]
+则 $\|f_N\|_2=1$。注意由 \eqref{eq:y0small}，
+\[
+ y_D^*-\frac{B_N}2=\frac12+\frac{1}{2\alpha_N}-\frac{1}{2\sqrt{\alpha_N}}>y_0
+\]
+对充分大的 $N$ 成立，故 $J_N\subset[y_0,\infty)$，于是 $f_N\in L^2([y_0,\infty))$
+且二次型 $\langle\mathscr A_Nf_N,f_N\rangle$ 有定义。在 $J_N$ 上，
+\[
+ V_\alpha(y)=V_\alpha(y_D^*)\bigl(1-O(\alpha_N^2(y-y_D^*)^2)\bigr)
+ =V_\alpha(y_D^*)(1-O(\alpha_N)),
+\]
+因为 $\alpha_NB_N^2=1$ 且 $V_\alpha''(y_D^*)/V_\alpha(y_D^*)=-4\alpha_N^2$。
+故
+\[
+ \begin{aligned}
+ \langle\mathscr A_Nf_N,f_N\rangle
+ &=\frac1{B_N}\iint_{J_N^2}\mathscr A_N(y,u)\dd y\dd u\\
+ &\ge\pi V_\alpha(y_D^*)(1-O(\alpha_N))
+ \cdot\frac1{B_N}\iint_{J_N^2}e^{-(1+\alpha_N)|y-u|}\dd y\dd u .
+ \end{aligned}
+\]
+该二重积分等于
+\[
+ \frac2{1+\alpha_N}\Bigl(B_N-\frac{1-e^{-(1+\alpha_N)B_N}}{1+\alpha_N}\Bigr)
+ =\frac{2B_N}{1+\alpha_N}(1-o(1)),
+\]
+故商为 $\frac{2}{1+\alpha_N}(1-o(1))$，断言由 \eqref{eq:peak} 得出。
+\end{proof}
+
+\begin{proposition}\label{prop:modelnorm}
+有
+\begin{equation}\label{eq:modelnorm}
+ \|\mathscr A_N\|=\Bigl(\frac{\pi}{e}+o(1)\Bigr)\alpha_N^{-1}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+结合命题~\ref{prop:schur} 与引理~\ref{lem:lower}。
+\end{proof}
+
+\section{比较}\label{sec:compare}
+
+\subsection*{5.1.\ 三个区域}
+
+固定 $0<c<\frac14$ 与 $C>1$，置
+\begin{equation}\label{eq:regions}
+ I_-=[y_0,c/\alpha_N],\qquad I_0=[c/\alpha_N,C/\alpha_N],\qquad
+ I_+=[C/\alpha_N,\infty),
+\end{equation}
+其中 $y_0$ 如 \eqref{eq:y0}。设 $P_-,P_0,P_+$ 是 $L^2([y_0,\infty))$ 到这些
+区间的正交投影。我们将逐块比较 $\mathcal D_N$ 与 $\mathscr A_N$。
+
+\subsection*{5.2.\ 行估计}
+
+\begin{lemma}\label{lem:row}
+对 $y\ge y_0$，
+\begin{equation}\label{eq:WNbound}
+ W_N(y)\ll e^{2y}(1+y),
+\end{equation}
+且
+\begin{equation}\label{eq:Dbound}
+ \mathscr D_N(y,u)\ll(1+\min(y,u))e^{-2\alpha_N\min(y,u)}
+ e^{-(1+\alpha_N)|y-u|}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+对第一个界，用 $q\le e^y$、当 $n\le x$ 时 $\Lambda(n)^2\le(\log x)\Lambda(n)$
+以及 $\sum_{n\le x}\Lambda(n)\ll x$：
+\[
+ W_N(y)\le e^y\sum_{n\le e^y}\Lambda(n)^2
+ \ll e^y\cdot e^y\cdot(1+y)=e^{2y}(1+y).
+\]
+对第二个界，把 \eqref{eq:WNbound} 与
+$\sqrt{m(y)m(u)}\le2e^{-(1+\alpha_N)(y+u)}$ 结合，并用
+$2\min-(1+\alpha_N)(y+u)=-2\alpha_N\min-(1+\alpha_N)|y-u|$。
+\end{proof}
+
+\begin{lemma}\label{lem:rows}
+对 $y\ge y_0$，
+\begin{equation}\label{eq:rowD}
+ \int_{y_0}^{\infty}\mathscr D_N(y,u)\dd u\ll R_\alpha(y),
+ \qquad
+ \int_{y_0}^{\infty}\mathscr A_N(y,u)\dd u\ll R_\alpha(y),
+\end{equation}
+其中 $R_\alpha(y)=(1+y)e^{-2\alpha_Ny}$。
+\end{lemma}
+
+\begin{proof}
+对 $\mathscr D_N$，把 \eqref{eq:Dbound} 分别对 $u\le y$ 与 $u\ge y$ 积分：
+\[
+ \int_{y_0}^{y}\mathscr D_N\dd u\ll R_\alpha(y)\int_{y_0}^{y}
+ e^{-(1-\alpha_N)(y-u)}\dd u\ll\frac{R_\alpha(y)}{1-\alpha_N},
+\]
+\[
+ \int_{y}^{\infty}\mathscr D_N\dd u\ll R_\alpha(y)
+ \int_0^{\infty}e^{-(1+\alpha_N)v}\dd v\ll\frac{R_\alpha(y)}{1+\alpha_N}.
+\]
+对 $\mathscr A_N$，同样的计算以 $V_\alpha\le R_\alpha$ 与比值界 \eqref{eq:ratio}
+成立。
+\end{proof}
+
+\subsection*{5.3.\ 边缘块}
+
+\begin{lemma}\label{lem:edge}
+有
+\begin{equation}\label{eq:low}
+ \|P_-\mathcal D_NP_-\|+\|P_-\mathscr A_NP_-\|\ll1+c/\alpha_N,
+\end{equation}
+且
+\begin{equation}\label{eq:high}
+ \|P_+\mathcal D_NP_+\|+\|P_+\mathscr A_NP_+\|\ll Ce^{-2C}/\alpha_N .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+对低区，注意当 $y\le c/\alpha_N$ 时 $R_\alpha(y)\le1+y\le1+c/\alpha_N$；
+用行界 \eqref{eq:rowD} 作 Schur 检验即得 \eqref{eq:low}。对高区，$R_\alpha$ 在
+$y\ge C/\alpha_N$ 上递减（因为当 $2\alpha_N(1+y)>1$ 时
+$R_\alpha'(y)=e^{-2\alpha_Ny}[1-2\alpha_N(1+y)]<0$，而 $C>1/2$ 保证了这一点），故
+\[
+ \sup_{y\ge C/\alpha_N}R_\alpha(y)=R_\alpha(C/\alpha_N)
+ \le\Bigl(1+\frac C{\alpha_N}\Bigr)e^{-2C}\ll\frac{Ce^{-2C}}{\alpha_N},
+\]
+再由 Schur 检验得 \eqref{eq:high}。
+\end{proof}
+
+\subsection*{5.4.\ 中心块}
+
+\begin{lemma}\label{lem:center}
+对固定的 $c,C$，
+\begin{equation}\label{eq:center}
+ \|P_0(\mathcal D_N-\mathscr A_N)P_0\|\le\epsilon_N(c,C)\|P_0\mathscr A_NP_0\|
+ =o(\alpha_N^{-1}),
+\end{equation}
+其中 $\epsilon_N(c,C)\to0$。
+\end{lemma}
+
+\begin{proof}
+由引理~\ref{lem:close}，在 $I_0\times I_0$ 上
+\[
+ |\mathscr D_N-\mathscr A_N|\le\epsilon_N(c,C)\mathscr A_N .
+\]
+由于 $\mathscr A_N$ 在 $I_0$ 上 $\ge0$（见下文引理~\ref{lem:positive}），对任意
+$f\in L^2(I_0)$，记 $|f|$ 为 $f$ 的模，则
+\[
+ \bigl|\langle(\mathcal D_N-\mathscr A_N)f,f\rangle\bigr|
+ \le\epsilon_N\int_{I_0}\!\int_{I_0}\mathscr A_N(y,u)\,|f(y)|\,|f(u)|\dd y\dd u
+ =\epsilon_N\langle\mathscr A_N|f|,|f|\rangle
+ \le\epsilon_N\|\mathscr A_N\|\,\|f\|^2 .
+\]
+对 $\|f\|=1$ 取上确界（注意 $f\mapsto|f|$ 保持 $L^2$ 范数），即得算子不等式
+$\|P_0(\mathcal D_N-\mathscr A_N)P_0\|\le\epsilon_N\|P_0\mathscr A_NP_0\|$。
+最后，由 \eqref{eq:rowD} 有 $\|P_0\mathscr A_NP_0\|\ll\alpha_N^{-1}$。
+\end{proof}
+
+\subsection*{5.5.\ 模型的正性}
+
+\begin{lemma}\label{lem:positive}
+核 $\mathscr A_N$ 在 $[y_0,\infty)^2$ 上半正定。
+\end{lemma}
+
+\begin{proof}
+写
+\[
+ \mathscr A_N(y,u)=\pi e^{-(1+\alpha_N)(y+u)}U(\min(y,u)),
+ \qquad U(y)=\Bigl(y-\frac12\Bigr)e^{2y}.
+\]
+由于 $y_0>\frac12$，有 $U(y_0)>0$，且当 $y\ge y_0$ 时 $U'(y)=2ye^{2y}>0$。故
+\[
+ U(\min(y,u))=U(y_0)+\int_{y_0}^{\infty}U'(v)\mathbf 1_{y\ge v}\mathbf 1_{u\ge v}\dd v .
+\]
+第一项给出秩一核 $U(y_0)e^{-(1+\alpha_N)(y+u)}$，第二项给出秩一核
+$e^{-(1+\alpha_N)(y+u)}\mathbf 1_{y\ge v}\mathbf 1_{u\ge v}$ 的非负组合。故
+$\mathscr A_N$ 是正核。
+\end{proof}
+
+\subsection*{5.6.\ 交叉块}
+
+\begin{lemma}\label{lem:cross}
+设 $T\ge0$ 是希尔伯特空间上的有界算子，$P,Q$ 为正交投影。则
+\begin{equation}\label{eq:cross}
+ \|PTQ\|^2\le\|PTP\|\,\|QTQ\| .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+写 $PTQ=(P T^{1/2})(T^{1/2}Q)$，用 $\|AB\|\le\|A\|\|B\|$ 以及
+$\|PT^{1/2}\|^2=\|PTP\|$、$\|T^{1/2}Q\|^2=\|QTQ\|$。
+\end{proof}
+
+\subsection*{5.7.\ 比较}
+
+\begin{proposition}\label{prop:compare}
+对固定的 $c,C$，
+\begin{equation}\label{eq:compare}
+ \limsup_{N\to\infty}\alpha_N\|\mathcal D_N-\mathscr A_N\|
+ \ll c+\sqrt c+Ce^{-2C}+\sqrt{Ce^{-2C}}+\sqrt{cCe^{-2C}} .
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由引理~\ref{lem:positive}，$\mathscr A_N\ge0$；由引理~\ref{lem:kernel}，
+$\mathcal D_N\ge0$。对 $T=\mathcal D_N$ 与 $T=\mathscr A_N$，引理~\ref{lem:cross}
+与对角估计 \eqref{eq:low}--\eqref{eq:center} 给出，对 $i\ne j$，
+\[
+ \|P_iTP_j\|\ll\frac{\sqrt{c}}{\alpha_N},\quad
+ \|P_0TP_+\|\ll\frac{\sqrt{Ce^{-2C}}}{\alpha_N},\quad
+ \|P_-TP_+\|\ll\frac{\sqrt{cCe^{-2C}}}{\alpha_N} .
+\]
+$\mathcal D_N-\mathscr A_N$ 的九个块被 $\mathcal D_N$ 与 $\mathscr A_N$ 的对应块
+之和控制（三角不等式），故
+\[
+ \alpha_N\|\mathcal D_N-\mathscr A_N\|
+ \ll c+\sqrt c+Ce^{-2C}+\sqrt{Ce^{-2C}}+\sqrt{cCe^{-2C}}+\epsilon_N(c,C).
+\]
+对固定的 $c,C$ 取 $\limsup_{N\to\infty}$ 并用 $\epsilon_N(c,C)\to0$ 即得
+\eqref{eq:compare}。量词的顺序是：先固定 $c$ 与 $C$，再令 $N\to\infty$，
+最后才令 $c\downarrow0$、$C\uparrow\infty$；\eqref{eq:compare} 是对每个固定的
+$(c,C)$ 断言、且关于 $N$ 一致的。
+\end{proof}
+
+\section{主定理的证明}\label{sec:proof}
+
+\begin{proof}[定理~\ref{thm:main} 的证明]
+取 $0<c<\frac14$、$C>1$。由命题~\ref{prop:compare}，
+\[
+ \limsup_{N\to\infty}\alpha_N\|\mathcal D_N-\mathscr A_N\|\ll\delta(c,C),
+\]
+其中 $\delta(c,C)=c+\sqrt c+Ce^{-2C}+\sqrt{Ce^{-2C}}+\sqrt{cCe^{-2C}}$。
+极限顺序是：先固定 $0<c<\frac14$ 与 $C>1$，令 $N\to\infty$，最后才令
+$c\downarrow0$、$C\uparrow\infty$。由于在该迭代极限下 $\delta(c,C)\to0$，我们得到
+\[
+ \alpha_N\|\mathcal D_N-\mathscr A_N\|\longrightarrow0 .
+\]
+由命题~\ref{prop:modelnorm}，
+$\|\mathscr A_N\|=(\pi/e+o(1))\alpha_N^{-1}$，因此
+\[
+ \|\mathcal D_N\|=\|\mathscr A_N\|+O\bigl(\|\mathcal D_N-\mathscr A_N\|\bigr)
+ =\Bigl(\frac{\pi}{e}+o(1)\Bigr)\alpha_N^{-1}
+ =\Bigl(\frac{\pi}{e}+o(1)\Bigr)\log N .
+\]
+\end{proof}
+
+\begin{proof}[推论~\ref{cor:HS} 的证明]
+由于 $\mathcal D_N\ge0$ 且 $\operatorname{tr}\mathcal D_N\ll\alpha_N^{-2}$，
+\[
+ \|\mathcal D_N\|_{\HS}^2=\operatorname{tr}(\mathcal D_N^2)
+ \le\|\mathcal D_N\|\operatorname{tr}\mathcal D_N
+ \ll\alpha_N^{-1}\cdot\alpha_N^{-2}=\alpha_N^{-3},
+\]
+故 $\|\mathcal D_N\|_{\HS}\ll\alpha_N^{-3/2}=(\log N)^{3/2}$。
+\end{proof}
+
+\section{注}\label{sec:remarks}
+
+\begin{remark}\label{rem:constant}
+常数 $\pi/e$ 有明确的来源。$\mathscr D_N$ 在对角线上的局部极限是以
+$e^{-(1+\alpha_N)|y-u|}$ 为核的卷积，其符号
+$2(1+\alpha_N)/((1+\alpha_N)^2+t^2)$ 在 $t=0$ 处取最大值 $2/(1+\alpha_N)$；
+乘子 $\pi$ 来自权重，指数 $e^{-1-\alpha_N}/(2\alpha_N)$ 来自峰值 $y_D^*$。
+乘积 $2\pi\cdot\frac12\cdot e^{-1}$ 即 $\pi/e$。
+\end{remark}
+
+\begin{remark}\label{rem:vsLL}
+论文 \cite[命题 6.5]{LL} 只用到
+$\|\mathcal D_N\|_{\HS}\le\operatorname{tr}\mathcal D_N\ll(\log N)^2$。
+定理~\ref{thm:main} 给出带精确常数的算子范数，推论~\ref{cor:HS} 把
+希尔伯特--施密特界改进到 $(\log N)^{3/2}$。
+\end{remark}
+
+\begin{remark}\label{rem:limitation}
+论证只用到素数定理；引理~\ref{lem:pnt} 的误差项除一致性外并不需要。特别地，
+结论是无条件的。它只涉及 $\mathcal D_N$ 自身的范数，不使用、也不声称关于
+\eqref{eq:split} 中完整算子 $T_N$ 的谱的任何信息。
+\end{remark}
+
+\begin{thebibliography}{9}
+
+\bibitem[LL]{LL}
+J. Li and J. Liu,
+\emph{A conditional proof of the Goldbach conjecture},
+arXiv:2606.05224 (2026).
+
+\end{thebibliography}
+
+\end{document}
